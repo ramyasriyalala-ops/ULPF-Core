@@ -1,0 +1,844 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>ULPF — Universal Log Pre-processing Framework</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#F7F7F9;--ink:#1E2330;--mut:#5A6273;--faint:#8B93A3;--line:#E5E7ED;--line2:#EFF0F4;--pri:#4338CA;--pri2:#4F46E5;--pris:#EEEFFD;--teal:#0E8A87;--teals:#E4F4F3;--code:#FAFAFC;
+--sans:"IBM Plex Sans",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;--mono:"IBM Plex Mono",ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+html{scroll-padding-top:env(safe-area-inset-top,0px);background:var(--bg)}
+*,*::before,*::after{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 14px/1.5 var(--sans);-webkit-font-smoothing:antialiased}
+:focus-visible{outline:2px solid var(--pri2);outline-offset:2px}
+button{font-family:inherit}
+[hidden]{display:none!important}
+.app{display:grid;grid-template-columns:240px minmax(0,1fr);min-height:100vh}
+.side{position:sticky;top:env(safe-area-inset-top,0px);height:calc(100vh - env(safe-area-inset-top,0px) - env(safe-area-inset-bottom,0px));background:#fff;border-right:1px solid var(--line);padding:22px 14px;display:flex;flex-direction:column;gap:26px}
+.brand{display:flex;gap:10px;align-items:center;padding:0 6px}
+.mark{width:34px;height:34px;border-radius:9px;background:var(--pri);color:#fff;display:grid;place-items:center;flex:none}
+.brand b{display:block;font-size:15px;letter-spacing:.02em}.brand small{display:block;color:var(--faint);font-size:11.5px;line-height:1.25}
+.nav{display:flex;flex-direction:column;gap:2px}
+.nav button{border:0;background:none;font:500 14px var(--sans);text-align:left;width:100%;display:flex;align-items:center;gap:10px;padding:9px 10px;border-radius:9px;color:var(--mut);cursor:pointer}
+.nav button:hover{background:#F3F4F8;color:var(--ink)}.nav button.on{background:var(--pris);color:var(--pri)}
+.foot{margin-top:auto;border:1px solid var(--line);border-radius:12px;padding:12px;background:var(--code);font-size:12px;color:var(--mut)}
+.foot b{display:block;color:var(--ink);font-weight:600;margin-bottom:2px}
+main{padding:32px 40px 56px;min-width:0;max-width:1320px;width:100%}
+.screen{display:none}.screen.on{display:block;animation:in .18s ease-out}
+@keyframes in{from{opacity:0}to{opacity:1}}
+@keyframes sp{to{transform:rotate(360deg)}}
+@media(prefers-reduced-motion:reduce){.screen.on,.steps li,.spin{animation:none!important}}
+h1{font-size:28px;line-height:1.2;letter-spacing:-.02em;font-weight:600;margin:0 0 8px}
+h2{font-size:16px;font-weight:600;margin:0}h3{margin:0;font-size:14px;font-weight:600}
+.sub{color:var(--mut);font-size:15px;max-width:68ch;margin:0}.hd{margin-bottom:24px}
+.tag{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:500;color:var(--pri);background:var(--pris);padding:4px 11px;border-radius:99px;margin-bottom:14px}
+.card{background:#fff;border:1px solid var(--line);border-radius:14px;box-shadow:0 1px 2px rgba(22,28,45,.04),0 8px 22px -10px rgba(22,28,45,.07)}
+.ch{display:flex;align-items:center;gap:10px;padding:14px 18px;border-bottom:1px solid var(--line2);flex-wrap:wrap}.ch h2{flex:1}
+.ch .ic{color:var(--pri2);display:flex}.cb{padding:18px}
+.chip{font:500 11.5px var(--mono);color:var(--mut);background:#F1F2F6;padding:3px 8px;border-radius:6px;white-space:nowrap;display:inline-flex;align-items:center;gap:5px}
+.chip.pri{color:var(--pri);background:var(--pris)}.chip.teal{color:#0B6E6B;background:var(--teals)}
+.btn{font:500 13px var(--sans);border-radius:9px;padding:8px 14px;border:1px solid var(--line);background:#fff;color:var(--ink);cursor:pointer;display:inline-flex;gap:6px;align-items:center}
+.btn:hover{background:#F7F7FB}.btn.pri{background:var(--pri);border-color:var(--pri);color:#fff}.btn.pri:hover{background:#3A30B5}
+.btn:disabled{opacity:.45;cursor:not-allowed}.btn.sm{padding:5px 10px;font-size:12.5px}
+.mut{color:var(--mut)}
+/* overview */
+.ovh{display:flex;gap:24px;align-items:flex-start;justify-content:space-between;flex-wrap:wrap}
+.sys{padding:12px 16px;display:flex;flex-direction:column;gap:8px;min-width:250px}
+.sys .sd{display:flex;align-items:center;gap:8px;font-weight:600}.sys .sd i{width:8px;height:8px;border-radius:50%;background:var(--teal);box-shadow:0 0 0 3px var(--teals)}
+.sys .sd span{margin-left:auto;font-weight:500;color:#0B6E6B;font-size:12.5px}
+.sys dl{display:flex;gap:18px;margin:0;font-size:12px;color:var(--mut)}.sys dd{margin:0;color:var(--ink);font-weight:500}.sys dt{font-size:11px;color:var(--faint)}
+.pipe{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:22px;padding:24px 22px 26px}
+.node{position:relative;border:1px solid var(--line);border-radius:12px;padding:14px;background:#fff}
+.node:not(:last-child)::after{content:"";position:absolute;right:-17px;top:50%;width:11px;height:11px;border-top:2px solid #B4BAD9;border-right:2px solid #B4BAD9;transform:translateY(-50%) rotate(45deg)}
+.node.core{border-color:#B9B5F5;background:var(--pris)}
+.ti{width:36px;height:36px;border-radius:10px;background:var(--pris);color:var(--pri);display:grid;place-items:center;margin-bottom:10px}
+.node.core .ti{background:var(--pri);color:#fff}
+.node p{margin:4px 0 0;font-size:12.5px;color:var(--mut);line-height:1.45}
+.srcs{display:flex;flex-direction:column;gap:6px;margin-top:10px}
+.srcs span{display:flex;align-items:center;gap:7px;font-size:12px;font-weight:500;background:#F5F6FA;border:1px solid var(--line2);border-radius:7px;padding:4px 8px}
+.srcs i{width:6px;height:6px;border-radius:50%;background:var(--teal)}
+.lane{position:relative;margin:0 22px 34px;height:14px;border:2px solid #A6D8D5;border-top:0;border-radius:0 0 12px 12px}
+.lane span{position:absolute;left:50%;bottom:-13px;transform:translateX(-50%);background:#fff;padding:0 14px;color:#0B6E6B;font-weight:500;font-size:12.5px;display:flex;gap:7px;align-items:center;white-space:nowrap}
+.kpis{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px;margin-top:18px}
+.kpi{padding:16px 18px;text-align:left;font:inherit;color:inherit}
+.kpi small{color:var(--mut);font-size:12.5px;font-weight:500}
+.kpi b{display:block;font-size:28px;letter-spacing:-.02em;font-weight:600;margin:4px 0 2px;font-variant-numeric:tabular-nums}
+.kpi span{font-size:12px;color:var(--faint)}.kpi.bad b{color:#B4233A}
+button.kpi{cursor:pointer;display:block;width:100%}button.kpi:hover{border-color:#F3C4CB;background:#FFFBFB}
+.bar{height:6px;border-radius:9px;background:#EDEFF4;margin-top:10px;overflow:hidden}.bar i{display:block;height:100%;background:var(--teal);border-radius:9px}
+.caps{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px;margin-top:18px}
+.cap{padding:18px;display:flex;flex-direction:column;gap:6px}.cap .ti{width:40px;height:40px;margin-bottom:6px}
+.cap p{margin:0 0 12px;color:var(--mut);font-size:13.5px}
+.cap .ev{margin-top:auto;padding-top:12px;border-top:1px solid var(--line2);font-size:12.5px;color:#0B6E6B;font-weight:500;display:flex;gap:6px;align-items:center}
+/* code + highlights */
+pre.code{margin:0;font:400 12px/1.8 var(--mono);background:var(--code);border:1px solid var(--line2);border-radius:10px;padding:14px 16px;white-space:pre-wrap;overflow-wrap:anywhere;color:#2A3040}
+mark{background:rgba(var(--h,100,116,139),.13);box-shadow:inset 0 -2px 0 rgba(var(--h,100,116,139),.5);color:inherit;border-radius:3px;padding:0 1px;transition:background .12s}
+mark.on{background:rgba(var(--h,100,116,139),.32)}
+[data-h="0"]{--h:100,116,139}[data-h="1"]{--h:79,70,229}[data-h="2"]{--h:217,119,6}[data-h="3"]{--h:14,138,135}[data-h="4"]{--h:2,132,199}[data-h="5"]{--h:124,58,237}[data-h="6"]{--h:190,24,93}
+.k{color:var(--pri)}.s{color:#0B6E6B}.nl{color:var(--faint)}.n{color:#98650A}.b{color:var(--pri2)}
+.hint{display:flex;align-items:center;gap:8px;color:var(--mut);font-size:13px;margin:0 0 14px}
+/* process */
+.ta{width:100%;font:400 12.5px/1.7 var(--mono);color:var(--ink);background:var(--code);border:1px solid var(--line);border-radius:10px;padding:12px 14px;resize:vertical;min-height:96px}
+.ta:focus{outline:2px solid var(--pri2);outline-offset:0;background:#fff}
+.chips{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:12px}.chips .lbl{font-size:12.5px;color:var(--faint);font-weight:500;margin-right:2px}
+.sc{border:1px solid var(--line);background:#fff;border-radius:99px;padding:5px 12px;font:500 12.5px var(--sans);color:var(--mut);cursor:pointer}
+.sc:hover{border-color:#C6CBE8;color:var(--pri);background:var(--pris)}
+.prf{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:12px;flex-wrap:wrap}.prf .note{margin:0}.prf div{display:flex;gap:8px}
+.inl{display:flex;align-items:center;gap:8px;font-size:12.5px;color:var(--mut);font-weight:500}
+.stg{margin-top:18px}
+.stp{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));padding:20px 18px 18px}
+.sg1{position:relative;padding-right:14px;min-width:0}
+.sg1 .dt{width:28px;height:28px;border-radius:50%;display:grid;place-items:center;background:#F3F4F8;color:var(--faint);border:1px solid var(--line);margin-bottom:10px;position:relative;z-index:1}
+.sg1.done .dt{background:var(--teals);color:var(--teal);border-color:#BFE3E1}
+.sg1.run .dt{background:#fff;border-color:#C6CBE8}
+.sg1.fail .dt{background:#FCEBEE;color:#B4233A;border-color:#F3C4CB}
+.sg1:not(:last-child)::after{content:"";position:absolute;top:14px;left:36px;right:8px;height:2px;background:var(--line)}
+.sg1.done:not(:last-child)::after{background:#BFE3E1}
+.sg1 b{display:block;font-size:13.5px;font-weight:600}.sg1 small{display:block;color:var(--mut);font-size:12.5px;margin-top:2px;overflow-wrap:anywhere}
+.sg1.wait b,.sg1.skip b{color:var(--faint)}.sg1.fail small{color:#B4233A}
+.spin{width:14px;height:14px;border:2px solid #C6CBE8;border-top-color:var(--pri2);border-radius:50%;animation:sp .7s linear infinite}
+.flow{display:grid;grid-template-columns:minmax(0,1.05fr) 32px minmax(0,.85fr) 32px minmax(0,1.3fr);align-items:stretch;margin-top:18px}
+.lk{display:grid;place-items:center}.lk span{width:28px;height:28px;border-radius:50%;background:#fff;border:1px solid var(--line);display:grid;place-items:center;color:var(--pri2);box-shadow:0 1px 2px rgba(22,28,45,.06)}
+.pcard{display:flex;flex-direction:column}.pcard .cb{flex:1;display:flex;flex-direction:column;gap:12px;min-width:0}
+.pcard.raw{border-top:3px solid #9AA3C7}.pcard.nrm{border-top:3px solid var(--pri2)}
+.kv{display:grid;grid-template-columns:1fr 1fr;gap:12px 16px;margin:4px 0 0}
+.kv div{min-width:0}.kv dt{font-size:11.5px;color:var(--faint);margin:0}.kv dd{margin:0;font-weight:500;font-size:13px;overflow-wrap:anywhere}
+.kv dd.m{font:500 12px var(--mono)}
+.pname{display:flex;align-items:center;gap:12px}.pname .ti{margin:0;width:42px;height:42px;flex:none}
+.pname b{display:block;font-size:15px}
+.steps{list-style:none;margin:6px 0 0;padding:0}
+.steps li{display:flex;gap:12px;position:relative;padding-bottom:18px;animation:in .4s ease-out both}
+.steps li:nth-child(2){animation-delay:.12s}.steps li:nth-child(3){animation-delay:.24s}
+.steps li:not(:last-child)::before{content:"";position:absolute;left:11px;top:27px;bottom:3px;width:2px;background:#BFE3E1}
+.tick{flex:none;width:24px;height:24px;border-radius:50%;background:var(--teals);color:var(--teal);display:grid;place-items:center}
+.tick.bad{background:#FCEBEE;color:#B4233A}.tick.skip{background:#F3F4F8;color:var(--faint)}
+.steps li.bad::before,.steps li.skip::before{background:var(--line)}
+.steps b{display:block;font-size:13.5px;font-weight:600}.steps small{color:var(--mut);font-size:12.5px;overflow-wrap:anywhere}
+.mml{border-top:1px solid var(--line2);padding-top:12px}.mml h3{font-size:12.5px;color:var(--mut);font-weight:500;margin-bottom:6px}
+.mm{display:flex;align-items:center;gap:8px;padding:4px 8px;border-radius:7px;font-size:12px;color:var(--faint)}
+.mm code{font:500 11.5px var(--mono);color:var(--ink)}.mm code.up{color:var(--pri)}
+.mm.on,.mr.on{background:rgba(var(--h,100,116,139),.12)}
+.note{color:var(--mut);font-size:12.5px;margin:0}
+.keep{margin-top:20px;display:flex;align-items:center;gap:16px;padding:16px 20px;border-radius:14px;background:var(--teals);border:1px solid #BFE3E1;flex-wrap:wrap}
+.keep .big{width:40px;height:40px;border-radius:50%;background:var(--teal);color:#fff;display:grid;place-items:center;flex:none}
+.keep h3{font-size:16px}.keep p{margin:0;color:#3F6F6D;font-size:13px}
+.keep .r{margin-left:auto;display:flex;align-items:center;gap:12px;flex-wrap:wrap}.keep .r small{color:#3F6F6D;font-weight:500}
+.keep .chip{font-size:13px;background:#fff;color:#0B6E6B;padding:5px 10px;border:1px solid #BFE3E1}
+.empty{border:1px dashed #D6D9E4;border-radius:10px;padding:18px;color:var(--mut);background:var(--code);flex:1}
+.empty b{color:var(--ink)}.empty p{margin:6px 0 0}
+/* events / tables */
+.filters{display:flex;gap:12px;flex-wrap:wrap;align-items:flex-end;margin-bottom:16px}
+.filters label{display:flex;flex-direction:column;gap:4px;font-size:12px;color:var(--faint);font-weight:500}
+.filters .grow{flex:1;min-width:220px}
+select,input.tx{font:400 13px var(--sans);color:var(--ink);background:#fff;border:1px solid var(--line);border-radius:9px;padding:8px 12px}
+select{background:#fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%238B93A3' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E") no-repeat right 10px center;padding-right:30px;min-width:150px;appearance:none;cursor:pointer}
+input.tx{width:100%}input.tx:focus{outline:2px solid var(--pri2);outline-offset:0}
+.count{margin-left:auto;font-size:12.5px;color:var(--mut);padding-bottom:9px}
+.tw{overflow-x:auto}table{width:100%;border-collapse:collapse}
+.tw table{min-width:840px}
+th{text-align:left;font-weight:500;font-size:12px;color:var(--faint);padding:11px 16px;border-bottom:1px solid var(--line);background:#FBFBFD;white-space:nowrap}
+td{padding:12px 16px;border-bottom:1px solid var(--line2);white-space:nowrap}
+tbody tr:last-child td{border-bottom:0}
+tr[data-ev]{cursor:pointer}tr[data-ev]:hover{background:#F6F7FF}
+.ts{font:400 12.5px var(--mono);color:var(--mut)}
+.srcc{display:flex;align-items:center;gap:10px;font-weight:500}.srcc small{display:block;color:var(--faint);font-weight:400;font-size:12px;line-height:1.3}
+.av{width:26px;height:26px;border-radius:7px;background:var(--pris);color:var(--pri);font:600 10.5px var(--sans);display:grid;place-items:center;flex:none}
+.av.g{background:#F1F2F6;color:var(--faint)}
+.fmt{font:500 11.5px var(--mono);color:var(--mut);border:1px solid var(--line);border-radius:6px;padding:2px 7px;background:#fff}
+.sev,.st{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:500;padding:3px 10px;border-radius:99px}
+.sev i,.st i{width:6px;height:6px;border-radius:50%;background:currentColor}
+.sev.critical{color:#B4233A;background:#FCEBEE}.sev.high{color:#B85310;background:#FEF0E4}.sev.medium{color:#98650A;background:#FCF5DC}
+.sev.low{color:#0B6E6B;background:var(--teals)}.sev.info{color:#4B5568;background:#EEF0F5}.sev.unknown{color:#6B7280;background:#F3F4F6}
+.st.ok{color:#0B6E6B;background:var(--teals)}.st.bad{color:#B4233A;background:#FCEBEE}
+.cty{overflow-wrap:anywhere;white-space:normal;max-width:360px}
+/* detail */
+.crumb{display:flex;align-items:center;gap:8px;color:var(--mut);font-size:13px;margin-bottom:14px}
+.crumb button{border:0;background:none;font:500 13px var(--sans);color:var(--pri);cursor:pointer;display:flex;align-items:center;gap:4px;padding:0}
+.meta{display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin-top:12px;color:var(--mut);font-size:13px}
+.pair{display:grid;grid-template-columns:minmax(0,1fr) 56px minmax(0,1fr);align-items:stretch}
+.bridge{position:relative;display:grid;place-items:center}
+.bridge::before{content:"";position:absolute;top:22px;bottom:22px;left:50%;border-left:2px dashed #C6CBE8}
+.bridge span{position:relative;z-index:1;width:38px;height:38px;border-radius:50%;background:#fff;border:1px solid #C6CBE8;color:var(--pri2);display:grid;place-items:center;box-shadow:0 2px 8px -2px rgba(67,56,202,.25)}
+.pfoot{display:flex;gap:14px;flex-wrap:wrap;font-size:12.5px;color:var(--mut);margin-top:auto}
+.mt{min-width:760px}.mt code{font:500 12px var(--mono)}.mt .rv{font:400 12px var(--mono);color:var(--mut)}
+.mr td{padding:10px 16px}.mr .dot{display:inline-block;width:9px;height:9px;border-radius:50%;background:rgb(var(--h,139,147,163));margin-right:8px;vertical-align:middle}
+.mr .up{color:var(--pri)}.mr .ar{color:var(--faint);width:36px;padding:0}
+.lin{display:flex;align-items:center;gap:10px;flex-wrap:wrap;padding:14px 18px 0;color:var(--faint)}
+.tr{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:20px 24px;padding:18px;margin:0}
+.tr dt{font-size:11.5px;color:var(--faint);margin:0 0 2px}.tr dd{margin:0;font-weight:500;overflow-wrap:anywhere}
+.tr dd.m{font:500 12.5px var(--mono)}.tr dd.g{color:#0B6E6B;display:flex;gap:6px;align-items:center}
+.sec{margin:34px 0 16px}.sec p{margin:2px 0 0;color:var(--mut)}
+/* registry */
+.regh{display:flex;align-items:flex-end;gap:16px;flex-wrap:wrap}.regh>div{flex:1;min-width:260px}
+.sig{font:400 11.5px var(--mono);color:var(--mut)}
+/* schema */
+.sx{display:grid;grid-template-columns:minmax(0,1fr) 400px;gap:20px;align-items:start}
+.sgs{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+.sgc .ch h2{font-size:14px}.sgc .cb{padding:8px}
+.fr{display:flex;align-items:center;gap:8px;width:100%;border:0;background:none;padding:8px 10px;border-radius:8px;cursor:pointer;text-align:left;color:var(--ink)}
+.fr:hover{background:#F6F7FB}.fr.on{background:var(--pris)}
+.fr code{font:500 12.5px var(--mono);flex:1}.fr.on code{color:var(--pri)}
+.fr i{width:8px;height:8px;border-radius:50%;background:rgb(var(--h,139,147,163));flex:none}.fr i.no{background:transparent;border:1.5px solid #D5D8E3}
+.sp{position:sticky;top:calc(env(safe-area-inset-top,0px) + 20px)}
+.sp .cb{display:flex;flex-direction:column;gap:14px}
+.sp code.path{font:600 15px var(--mono);color:var(--pri)}
+.sp dt{font-size:11.5px;color:var(--faint);margin:0 0 3px}.sp dd{margin:0}
+.vt{width:100%;font-size:13px}.vt td{padding:8px 0;border-bottom:1px solid var(--line2);white-space:normal}.vt tr:last-child td{border-bottom:0}.vt td:first-child{color:var(--mut);width:42%}
+.vt code{font:500 12px var(--mono)}
+.legend{display:flex;gap:16px;flex-wrap:wrap;color:var(--mut);font-size:12.5px;margin-bottom:14px;align-items:center}
+.legend i{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:5px;vertical-align:middle}
+/* analytics */
+.charts{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;margin-top:16px}
+.charts .card .cb{min-height:236px}
+.hb{display:grid;grid-template-columns:118px minmax(0,1fr) 44px;align-items:center;gap:10px;font-size:12.5px;margin-bottom:11px}
+.hb>span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.hb .tk{height:10px;background:#F0F1F6;border-radius:9px;overflow:hidden}.hb .tk i{display:block;height:100%;border-radius:9px;background:var(--pri2)}
+.hb em{font-style:normal;text-align:right;font-variant-numeric:tabular-nums;color:var(--mut)}
+.dn{display:flex;align-items:center;gap:20px;flex-wrap:wrap}.dn svg{flex:none}
+.leg{display:flex;flex-direction:column;gap:10px;font-size:12.5px;flex:1;min-width:120px}
+.leg div{display:flex;align-items:center;gap:8px}.leg i{width:10px;height:10px;border-radius:3px;flex:none}.leg em{margin-left:auto;font-style:normal;color:var(--mut);font-variant-numeric:tabular-nums}
+.cols{display:flex;align-items:flex-end;gap:12px;height:172px}
+.col{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;gap:5px;font-size:12px;min-width:0}
+.col i{width:100%;max-width:38px;border-radius:7px 7px 3px 3px;display:block}.col b{font-weight:500;font-variant-numeric:tabular-nums;font-size:11.5px}.col span{color:var(--mut)}
+.two{display:grid;grid-template-columns:minmax(0,1.4fr) minmax(0,1fr);gap:16px;margin-top:16px}
+.two .tw table{min-width:520px}
+.rate{display:flex;align-items:center;gap:10px}.rate .bar{margin:0;flex:1;min-width:70px}.rate em{font-style:normal;font-variant-numeric:tabular-nums;min-width:52px;text-align:right}
+.fl{padding:6px 10px}
+.fli{display:flex;gap:12px;align-items:flex-start;padding:12px 8px;border-bottom:1px solid var(--line2);cursor:pointer;border-radius:8px}
+.fli:hover{background:#F6F7FF}.fli:last-child{border-bottom:0}.fli div{min-width:0;flex:1}.fli b{font-weight:500;display:block;overflow-wrap:anywhere;font-size:13px}.fli small{color:var(--faint);font-size:12px}
+/* modal + toast */
+.modal{position:fixed;inset:0;background:rgba(30,35,48,.38);display:grid;place-items:center;padding:20px;z-index:50;overflow:auto}
+.dlg{width:100%;max-width:680px;background:#fff;border-radius:16px;box-shadow:0 24px 60px -12px rgba(22,28,45,.35);max-height:calc(100vh - 40px);display:flex;flex-direction:column}
+.dlg .dh{padding:20px 24px 0}.dlg .dh h2{font-size:18px}
+.wz{display:flex;gap:8px;margin:16px 0 0;padding-bottom:16px;border-bottom:1px solid var(--line2)}
+.wz div{flex:1;display:flex;align-items:center;gap:8px;font-size:12.5px;font-weight:500;color:var(--faint)}
+.wz i{width:22px;height:22px;border-radius:50%;background:#F1F2F6;display:grid;place-items:center;font-style:normal;font-size:11.5px;flex:none}
+.wz .on{color:var(--pri)}.wz .on i{background:var(--pri);color:#fff}.wz .dn2{color:#0B6E6B}.wz .dn2 i{background:var(--teals);color:var(--teal)}
+.dlg .db{padding:20px 24px;overflow:auto;display:flex;flex-direction:column;gap:14px}
+.dlg .df{padding:14px 24px;border-top:1px solid var(--line2);display:flex;gap:8px;justify-content:flex-end;background:#FBFBFD;border-radius:0 0 16px 16px}
+.dlg .df .sp2{margin-right:auto}
+.fld{display:flex;flex-direction:column;gap:5px;font-size:12.5px;font-weight:500;color:var(--mut)}
+.fld input,.fld select,.fld textarea{font:400 13.5px var(--sans);color:var(--ink);border:1px solid var(--line);border-radius:9px;padding:9px 12px;width:100%;background-color:#fff}
+.fld input:focus,.fld textarea:focus{outline:2px solid var(--pri2);outline-offset:0}
+.mrow{display:grid;grid-template-columns:minmax(0,1fr) 20px minmax(0,1.3fr) 32px;gap:8px;align-items:center}
+.mrow input,.mrow select{font:400 13px var(--mono);border:1px solid var(--line);border-radius:9px;padding:8px 10px;width:100%;min-width:0;color:var(--ink)}
+.mrow .x{border:0;background:none;color:var(--faint);cursor:pointer;border-radius:8px;height:32px}.mrow .x:hover{background:#F3F4F8;color:#B4233A}
+.mhead{display:grid;grid-template-columns:minmax(0,1fr) 20px minmax(0,1.3fr) 32px;gap:8px;font-size:12px;color:var(--faint);font-weight:500}
+.vres{border:1px solid var(--line);border-radius:12px;padding:14px 16px;display:flex;flex-direction:column;gap:8px;font-size:13px}
+.vres .ln{display:flex;gap:10px;align-items:flex-start}.vres .ln .tick{width:20px;height:20px}
+.vres.okb{background:var(--teals);border-color:#BFE3E1}.vres.badb{background:#FFF7F8;border-color:#F3C4CB}
+.vres h3{font-size:14px}
+.toast{position:fixed;right:20px;bottom:calc(20px + env(safe-area-inset-bottom,0px));background:#fff;border:1px solid var(--line);border-left:3px solid var(--teal);border-radius:10px;padding:11px 16px;box-shadow:0 12px 30px -8px rgba(22,28,45,.25);font-size:13px;font-weight:500;z-index:60;max-width:340px;opacity:0;transform:translateY(8px);pointer-events:none;transition:opacity .18s,transform .18s}
+.toast.on{opacity:1;transform:none}
+@media(max-width:1240px){
+.pipe{grid-template-columns:1fr;gap:26px}
+.node:not(:last-child)::after{right:auto;left:50%;top:auto;bottom:-19px;transform:translateX(-50%) rotate(135deg)}
+.lane{display:none}.caps,.kpis{grid-template-columns:repeat(2,minmax(0,1fr))}
+.flow{grid-template-columns:1fr}.lk{padding:12px 0}.lk svg{transform:rotate(90deg)}
+.charts,.two{grid-template-columns:minmax(0,1fr)}
+.sx{grid-template-columns:1fr}.sp{position:static}
+.stp{grid-template-columns:1fr;gap:14px}.sg1:not(:last-child)::after{display:none}}
+@media(max-width:900px){
+.app{grid-template-columns:1fr}.side{position:static;height:auto;padding:12px;gap:12px;border-right:0;border-bottom:1px solid var(--line)}
+.nav{flex-direction:row;overflow-x:auto}.nav button{width:auto;white-space:nowrap}.foot{display:none}
+main{padding:22px 16px 40px}.caps,.kpis{grid-template-columns:1fr}.sgs{grid-template-columns:1fr}
+.pair{grid-template-columns:1fr}.bridge{height:48px}.bridge::before{top:50%;bottom:auto;left:24px;right:24px;border-left:0;border-top:2px dashed #C6CBE8}
+.tr{grid-template-columns:1fr 1fr}.keep .r{margin-left:0}.mrow{grid-template-columns:1fr 1fr 32px}.mrow>span{display:none}.mhead{display:none}}
+/* table fit: tighter cells, wrap long text so tables fit at 1280px and above */
+.tw th,.tw td{padding-left:12px;padding-right:12px}
+#evb td:nth-child(2),#evb td:nth-child(4),#evb td:nth-child(6),#regb td:nth-child(1),#regb td:nth-child(3){white-space:normal}
+#regb td:nth-child(3){min-width:140px}
+#ov-act td:nth-child(3),#ov-act td:nth-child(5),.two .tw td:first-child{white-space:normal}
+@media(max-width:900px){.app{grid-template-columns:minmax(0,1fr)}.side{min-width:0}}
+</style>
+</head>
+<body>
+<div class="app">
+<aside class="side">
+  <div class="brand"><div class="mark" id="mk"></div><div><b>ULPF</b><small>Log Pre-processing<br>Framework</small></div></div>
+  <nav class="nav" id="nav" aria-label="Main"></nav>
+  <div class="foot"><b>NTRO Problem Statement 26156</b>Universal Event Schema v1.0</div>
+</aside>
+<main>
+  <section class="screen" id="s-overview"></section>
+  <section class="screen" id="s-process"></section>
+  <section class="screen" id="s-events"></section>
+  <section class="screen" id="s-detail"></section>
+  <section class="screen" id="s-registry"></section>
+  <section class="screen" id="s-schema"></section>
+  <section class="screen" id="s-analytics"></section>
+</main>
+</div>
+<div class="modal" id="modal" hidden></div>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+<script>
+/* ===== ULPF core: detection, parsers, normalization, mock data ===== */
+const DATE='2026-09-20',YEAR=2026,SCHEMA='1.0';
+const MON={Jan:1,Feb:2,Mar:3,Apr:4,May:5,Jun:6,Jul:7,Aug:8,Sep:9,Oct:10,Nov:11,Dec:12};
+const p2=n=>String(n).padStart(2,'0');
+const sevSys=n=>n<=2?'critical':n===3?'high':n===4?'medium':n===5?'low':'info';
+const sevName=s=>{s=String(s).toLowerCase();return /^(emerg|alert|crit|fatal)/.test(s)?'critical':/^(err|high)/.test(s)?'high':/^(warn|med)/.test(s)?'medium':/^(notice|low)/.test(s)?'low':'info'};
+const sevCef=n=>n>=9?'critical':n>=7?'high':n>=4?'medium':'low';
+const protoName=p=>({1:'icmp',6:'tcp',17:'udp'}[p]||String(p).toLowerCase());
+const actNorm=a=>{a=String(a).toLowerCase();return /^(deny|denied|reject|refuse)/.test(a)?'deny':/^(accept|allow|permit|built|pass)/.test(a)?'allow':/^(drop|block|reset)/.test(a)?'block':/^(close|teardown|timeout)/.test(a)?'close':a};
+const tNet=(p,v,s,d,dp)=>`${(p||'IP').toUpperCase()} connection ${v}${s&&d?` from ${s} to ${d}${dp?':'+dp:''}`:''}`;
+const TL={'network.connection.denied':'Connection Denied','network.connection.allowed':'Connection Allowed','network.connection.closed':'Connection Closed','auth.login.failed':'Login Failed','auth.login.success':'Login Successful','intrusion.detected':'Intrusion Detected','threat.detected':'Threat Detected','web.attack.detected':'Web Attack Detected','web.request.blocked':'Web Request Blocked','system.config.changed':'Configuration Changed','network.interface.down':'Interface Down','network.interface.up':'Interface Up','network.device.event':'Network Device Event','system.log.message':'System Message','application.event':'Application Event','security.alert':'Security Alert','firewall.event':'Firewall Event'};
+const ORDER=['timestamp','source.vendor','source.product','source.device','event.type','event.severity','event.action','network.source_ip','network.source_port','network.destination_ip','network.destination_port','network.protocol'];
+const HUE={'timestamp':0,'source.vendor':0,'source.product':0,'source.device':0,'event.type':1,'event.severity':2,'network.source_ip':3,'network.source_port':3,'network.destination_ip':4,'network.destination_port':4,'network.protocol':5,'event.action':6};
+
+/* simulated ingest clock (seconds since midnight) */
+let clock=9*3600+18*60+52;
+const clockStr=()=>`${p2(clock/3600|0)}:${p2(clock%3600/60|0)}:${p2(clock%60)}`;
+const epochMs=()=>(1789862400+clock)*1000;
+
+/* ---------- parser registry ---------- */
+const PARSERS=[
+ {id:'asa',name:'Cisco ASA',vendor:'Cisco',product:'ASA Firewall',fmt:'Syslog',ver:'1.0',fields:12,sig:'%ASA-n-nnnnnn message ID',ms:1.8},
+ {id:'forti',name:'Fortinet',vendor:'Fortinet',product:'FortiGate',fmt:'Syslog',ver:'1.2',fields:14,sig:'devname= and type= key-value pairs',ms:2.1},
+ {id:'cef',name:'CEF',vendor:'Multi-vendor',product:'ArcSight CEF',fmt:'CEF',ver:'1.1',fields:10,sig:'CEF:0| header',ms:2.6},
+ {id:'json',name:'Generic JSON',vendor:'Multi-vendor',product:'JSON events',fmt:'JSON',ver:'1.0',fields:9,sig:'JSON object with timestamp field',ms:1.4},
+ {id:'syslog',name:'Generic Syslog',vendor:'Multi-vendor',product:'RFC 3164 syslog',fmt:'Syslog',ver:'1.3',fields:8,sig:'RFC 3164 header',ms:1.6}
+];
+
+/* ---------- Cisco ASA ---------- */
+function pASA(r){
+ const h=r.match(/^(<\d+>)?([A-Z][a-z]{2}\s+\d{1,2}\s+\d{4}\s+\d\d:\d\d:\d\d)\s+(\S+)\s+:\s+%(ASA-(\d))-(\d+):\s*(.*)$/d);
+ if(!h)return{ok:false,reason:'Cisco ASA message header not recognized'};
+ const ix=h.indices,map=[],tm=h[2].match(/([A-Z][a-z]{2})\s+(\d+)\s+(\d{4})\s+(\d\d:\d\d:\d\d)/);
+ map.push(['timestamp','timestamp',...ix[2]],['hostname','source.device',...ix[3]],['severity','event.severity',...ix[4]],['message_id','event.type',...ix[6]]);
+ const id=h[6],msg=h[7],off=ix[7][0],ad=(vf,path,m,i)=>map.push([vf,path,m.indices[i][0]+off,m.indices[i][1]+off]);
+ const o={parserId:'asa',fmt:'Syslog',vendor:'Cisco',product:'ASA Firewall',device:h[3],label:'Cisco ASA',category:'network',ts:`${tm[3]}-${p2(MON[tm[1]])}-${p2(tm[2])}T${tm[4]}Z`,severity:sevSys(+h[5]),map,net:{}};
+ let m;
+ if(id==='106023'&&(m=msg.match(/^(Deny|Permit)\s+(\w+)\s+src\s+\w+:([\d.]+)\/(\d+)\s+dst\s+\w+:([\d.]+)\/(\d+)/d))){
+  ad('action','event.action',m,1);ad('protocol','network.protocol',m,2);ad('src','network.source_ip',m,3);ad('sport','network.source_port',m,4);ad('dst','network.destination_ip',m,5);ad('dport','network.destination_port',m,6);
+  Object.assign(o,{type:'network.connection.denied',action:actNorm(m[1]),net:{sip:m[3],sport:+m[4],dip:m[5],dport:+m[6],proto:m[2].toLowerCase()},title:tNet(m[2],'denied',m[3],m[5],m[6])});
+ }else if(/^30201[35]$/.test(id)&&(m=msg.match(/^(Built)\s+(inbound|outbound)\s+(TCP|UDP)\s+connection\s+\d+\s+for\s+\w+:([\d.]+)\/(\d+)\s+\([\d.]+\/\d+\)\s+to\s+\w+:([\d.]+)\/(\d+)/d))){
+  const inb=m[2]==='inbound',S=inb?[4,5]:[6,7],D=inb?[6,7]:[4,5];
+  ad('action','event.action',m,1);ad('protocol','network.protocol',m,3);ad('src','network.source_ip',m,S[0]);ad('sport','network.source_port',m,S[1]);ad('dst','network.destination_ip',m,D[0]);ad('dport','network.destination_port',m,D[1]);
+  Object.assign(o,{type:'network.connection.allowed',action:actNorm(m[1]),net:{sip:m[S[0]],sport:+m[S[1]],dip:m[D[0]],dport:+m[D[1]],proto:m[3].toLowerCase()},title:tNet(m[3],'allowed',m[S[0]],m[D[0]],m[D[1]])});
+ }else if(/^30201[46]$/.test(id)&&(m=msg.match(/^(Teardown)\s+(TCP|UDP)\s+connection\s+\d+\s+for\s+\w+:([\d.]+)\/(\d+)\s+to\s+\w+:([\d.]+)\/(\d+)/d))){
+  ad('action','event.action',m,1);ad('protocol','network.protocol',m,2);ad('src','network.source_ip',m,3);ad('sport','network.source_port',m,4);ad('dst','network.destination_ip',m,5);ad('dport','network.destination_port',m,6);
+  Object.assign(o,{type:'network.connection.closed',action:'close',net:{sip:m[3],sport:+m[4],dip:m[5],dport:+m[6],proto:m[2].toLowerCase()},title:tNet(m[2],'closed',m[3],m[5],m[6])});
+ }else if(/^1110\d\d$/.test(id)&&(m=msg.match(/^User\s+'([^']+)'\s+(executed)\s+the\s+'([^']*)'\s+command/d))){
+  ad('verb','event.action',m,2);
+  Object.assign(o,{type:'system.config.changed',category:'configuration',action:'execute',user:m[1],title:`Firewall configuration changed by ${m[1]}`});
+ }else Object.assign(o,{type:'firewall.event',action:'log',title:`Firewall event ${id}`});
+ return{ok:true,...o};
+}
+
+/* ---------- Fortinet ---------- */
+function pForti(r){
+ const kv={},re=/(\w+)=("[^"]*"|\S+)/dg;let m;
+ while((m=re.exec(r))){const q=m[2][0]==='"',[s,e]=m.indices[2];kv[m[1]]={v:q?m[2].slice(1,-1):m[2],s:s+(q?1:0),e:e-(q?1:0),ks:m.indices[1][0]}}
+ if(!kv.date||!kv.time||!kv.type)return{ok:false,reason:'Fortinet log is missing date, time or type'};
+ const g=k=>kv[k]&&kv[k].v,map=[],add=(vf,path,k)=>{if(kv[k])map.push([vf,path,kv[k].s,kv[k].e])};
+ const ty=g('type'),st=g('subtype')||'',act=actNorm(g('action')||'');
+ let type,category,tk='type',title;
+ if(ty==='traffic'){type=act==='close'?'network.connection.closed':(act==='deny'||act==='block')?'network.connection.denied':'network.connection.allowed';category='network'}
+ else if(ty==='utm'&&st==='ips'){type='intrusion.detected';category='intrusion_detection';tk='subtype'}
+ else if(ty==='utm'&&st==='webfilter'){type='web.request.blocked';category='web';tk='subtype'}
+ else if(ty==='utm'){type='threat.detected';category='malware';tk='subtype'}
+ else{type='system.log.message';category='system'}
+ const sk=kv.severity?'severity':kv.level?'level':null,pr=g('proto')?protoName(g('proto')):null;
+ map.push(['date + time','timestamp',kv.date.ks,kv.time.e]);
+ add('devname','source.device','devname');add(tk,'event.type',tk);if(sk)add(sk,'event.severity',sk);add('action','event.action','action');
+ add('srcip','network.source_ip','srcip');add('srcport','network.source_port','srcport');add('dstip','network.destination_ip','dstip');add('dstport','network.destination_port','dstport');add('proto','network.protocol','proto');
+ const net={sip:g('srcip'),sport:g('srcport')?+g('srcport'):null,dip:g('dstip'),dport:g('dstport')?+g('dstport'):null,proto:pr};
+ const verb=type.endsWith('closed')?'closed':type.endsWith('denied')?'denied':'allowed';
+ title=ty==='traffic'?tNet(pr,verb,net.sip,net.dip,net.dport):type==='intrusion.detected'?`IPS ${act==='block'?'blocked':'detected'} ${g('attack')||'an attack'}`:`${ty} ${st} event`;
+ return{ok:true,parserId:'forti',fmt:'Syslog',vendor:'Fortinet',product:'FortiGate',device:g('devname')||'unknown',label:'Fortinet',type,category,ts:`${g('date')}T${g('time')}Z`,severity:sk?sevName(g(sk)):'info',action:act||'log',net,map,title};
+}
+
+/* ---------- CEF ---------- */
+function pCEF(r){
+ const f=[],st=r.indexOf('CEF:');
+ for(let k=st,s=st;k<r.length&&f.length<7;k++){if(r[k]==='|'&&r[k-1]!=='\\'){f.push([s,k]);s=k+1}}
+ if(f.length<7)return{ok:false,reason:`Malformed CEF header: found ${f.length} of 7 header fields`};
+ const hv=i=>r.slice(f[i][0],f[i][1]),x0=f[6][1]+1,ext=r.slice(x0),kv={},re=/(\w+)=(.*?)(?=\s+\w+=|$)/dg;let m;
+ while((m=re.exec(ext))){kv[m[1]]={v:m[2].trim(),s:m.indices[2][0]+x0,e:m.indices[2][0]+x0+m[2].trimEnd().length}}
+ let ts=null;const rt=kv.rt&&kv.rt.v;
+ if(rt){if(/^\d{10,13}$/.test(rt))ts=new Date(rt.length===13?+rt:+rt*1000).toISOString().slice(0,19)+'Z';else{const d=Date.parse(rt+' UTC');if(!isNaN(d))ts=new Date(d).toISOString().slice(0,19)+'Z'}}
+ if(!ts)return{ok:false,reason:'CEF event has no usable rt timestamp'};
+ const name=hv(5),act=actNorm(kv.act?kv.act.v:'log'),map=[],add=(vf,path,k)=>{if(kv[k])map.push([vf,path,kv[k].s,kv[k].e])};
+ map.push(['rt','timestamp',kv.rt.s,kv.rt.e],['DeviceVendor','source.vendor',...f[1]],['DeviceProduct','source.product',...f[2]],['Name','event.type',...f[5]],['Severity','event.severity',...f[6]]);
+ add('dvchost','source.device','dvchost');add('act','event.action','act');add('src','network.source_ip','src');add('spt','network.source_port','spt');add('dst','network.destination_ip','dst');add('dpt','network.destination_port','dpt');add('proto','network.protocol','proto');
+ let type='security.alert',category='security';
+ if(/sql|xss|injection|web attack|traversal/i.test(name)){type='web.attack.detected';category='web'}
+ else if(/spyware|malware|virus|trojan|phone home|botnet/i.test(name)){type='threat.detected';category='malware'}
+ const vendor=hv(1),label=/palo/i.test(vendor)?'Palo Alto':/imperva/i.test(vendor)?'Imperva WAF':vendor;
+ const net={sip:kv.src&&kv.src.v,sport:kv.spt?+kv.spt.v:null,dip:kv.dst&&kv.dst.v,dport:kv.dpt?+kv.dpt.v:null,proto:kv.proto?kv.proto.v.toLowerCase():null};
+ return{ok:true,parserId:'cef',fmt:'CEF',vendor,product:hv(2),device:kv.dvchost?kv.dvchost.v:hv(2),label,type,category,ts,severity:sevCef(+hv(6)),action:act,net,map,title:`${name} (${act})`};
+}
+
+/* ---------- Generic JSON ---------- */
+function pJSON(r){
+ let o;try{o=JSON.parse(r)}catch(e){return{ok:false,reason:'Invalid JSON: '+String(e.message).replace(/ in JSON at position.*/,'').slice(0,60)}}
+ if(!o||typeof o!=='object'||Array.isArray(o))return{ok:false,reason:'JSON root is not an object'};
+ const key=(...a)=>a.find(k=>o[k]!==undefined&&o[k]!==null);
+ const kT=key('ts','timestamp','time','@timestamp');
+ if(!kT)return{ok:false,reason:'No timestamp field found (ts, timestamp, time)'};
+ const tv=o[kT],d=typeof tv==='number'?new Date(tv<1e11?tv*1000:tv):new Date(tv);
+ if(isNaN(d))return{ok:false,reason:'Timestamp could not be parsed'};
+ const kS=key('client_ip','src_ip','source_ip','src','remote_ip'),kD=key('server_ip','dst_ip','destination_ip','dst'),kSp=key('client_port','src_port','sport','source_port'),kDp=key('server_port','dst_port','dport','destination_port'),kPr=key('proto','protocol'),kR=key('result','outcome','action','status'),kE=key('evt','event','event_type','event_name'),kL=key('level','severity','lvl'),kA=key('app','service','application'),kH=key('host','hostname','device');
+ const jp=k=>{const m=r.match(new RegExp('"'+k.replace(/[.*+?^${}()|[\]\\@]/g,'\\$&')+'"\\s*:\\s*("(?:[^"\\\\]|\\\\.)*"|[^,}\\s]+)','d'));if(!m)return null;const q=m[1][0]==='"';return[m.indices[1][0]+(q?1:0),m.indices[1][1]-(q?1:0)]};
+ const map=[],add=(k,path)=>{if(k){const p=jp(k);if(p)map.push([k,path,...p])}};
+ const evt=String(o[kE]||''),res=String(o[kR]||''),app=kA?String(o[kA]):'',bad=/fail|denied|invalid|reject/i.test(evt+' '+res);
+ let type='application.event',category='application',title;
+ const label=app==='vpn-gateway'?'VPN Gateway':app?app.replace(/[-_]/g,' ').replace(/\b\w/g,c=>c.toUpperCase()):'Generic JSON App';
+ if(/login|logon|auth/i.test(evt)){type=bad?'auth.login.failed':'auth.login.success';category='authentication'}
+ const action=res?actNorm(res):(type==='auth.login.failed'?'deny':type==='auth.login.success'?'allow':'log');
+ const sip=kS?String(o[kS]):null,dip=kD?String(o[kD]):null;
+ title=category==='authentication'?`${label} login ${bad?'failed':'successful'}${o.user?' for '+o.user:''}${sip?' from '+sip:''}`:`${label}: ${evt||'event'}`;
+ add(kT,'timestamp');add(kH||kA,'source.device');add(kE,'event.type');add(kL,'event.severity');add(kR,'event.action');add(kS,'network.source_ip');add(kSp,'network.source_port');add(kD,'network.destination_ip');add(kDp,'network.destination_port');add(kPr,'network.protocol');
+ return{ok:true,parserId:'json',fmt:'JSON',vendor:'Generic',product:app||'JSON application',device:String(o[kH]||app||'unknown'),label,type,category,ts:d.toISOString().slice(0,19)+'Z',severity:kL?sevName(o[kL]):'info',action,net:{sip,sport:kSp?+o[kSp]:null,dip,dport:kDp?+o[kDp]:null,proto:kPr?String(o[kPr]).toLowerCase():null},map,title,user:o.user};
+}
+
+/* ---------- Generic Syslog (RFC 3164) ---------- */
+function pSys(r){
+ const h=r.match(/^(<(\d+)>)?([A-Z][a-z]{2})\s+(\d{1,2})\s(\d\d:\d\d:\d\d)\s(\S+)\s(.*)$/d);
+ if(!h)return{ok:false,reason:'Not an RFC 3164 syslog message'};
+ const ix=h.indices,map=[['timestamp','timestamp',ix[3][0],ix[5][1]],['hostname','source.device',...ix[6]]];
+ const roff=ix[7][0],rest=h[7],o={parserId:'syslog',fmt:'Syslog',device:h[6],ts:`${YEAR}-${p2(MON[h[3]])}-${p2(h[4])}T${h[5]}Z`,severity:h[2]!==undefined?sevSys(+h[2]%8):'info',net:{},map};
+ const ad=(m,vf,path,i,base=roff)=>map.push([vf,path,m.indices[i][0]+base,m.indices[i][1]+base]);
+ let m,pri=true;
+ if((m=rest.match(/^%([A-Z0-9_]+)-(\d)-([A-Z0-9_]+):\s*(.*)$/d))){
+  pri=false;o.severity=sevSys(+m[2]);ad(m,'severity','event.severity',2);ad(m,'mnemonic','event.type',3);
+  let type='network.device.event',action='log',title=`${m[1]} ${m[3]} on ${h[6]}`,u;
+  if((u=m[4].match(/^Interface\s+(\S+?),\s+changed state to\s+(up|down)/d))){type='network.interface.'+u[2];action=u[2];ad(u,'state','event.action',2,m.indices[4][0]+roff);title=`Interface ${u[1]} on ${h[6]} changed state to ${u[2]}`}
+  Object.assign(o,{vendor:'Generic',product:'Network device (syslog)',label:'Generic Network Device',type,category:'network',action,title});
+ }else if((m=rest.match(/^sshd\[\d+\]:\s*((Failed|Accepted)\s+\w+)\s+for\s+(?:invalid user\s+)?(\S+)\s+from\s+([\d.]+)\s+port\s+(\d+)\s+(ssh\d?)/d))){
+  const f=m[2]==='Failed';ad(m,'message','event.type',1);ad(m,'verb','event.action',2);ad(m,'from','network.source_ip',4);ad(m,'port','network.source_port',5);ad(m,'service','network.protocol',6);
+  Object.assign(o,{vendor:'Linux',product:'OpenSSH',label:'Linux Server',type:f?'auth.login.failed':'auth.login.success',category:'authentication',action:f?'failure':'success',net:{sip:m[4],sport:+m[5],dip:null,dport:null,proto:'ssh'},user:m[3],title:`SSH login ${f?'failed':'successful'} for ${m[3]} from ${m[4]}`});
+ }else{
+  m=rest.match(/^([\w\-./]+)(?:\[\d+\])?:\s*(.*)$/d);
+  if(m)ad(m,'program','event.type',1);
+  Object.assign(o,{vendor:'Linux',product:m?m[1]:'syslog',label:m?'Linux Server':'Generic Network Device',type:'system.log.message',category:'system',action:'log',title:m?`${m[1]}: ${m[2].slice(0,70)}`:rest.slice(0,80)});
+ }
+ if(pri&&h[1])map.push(['PRI','event.severity',...ix[1]]);
+ return{ok:true,...o};
+}
+
+/* ---------- parsers registered through the wizard ---------- */
+function pCust(p,r){
+ const kv={},re=/([\w.]+)=("[^"]*"|\S+)/dg;let m;
+ while((m=re.exec(r))){const q=m[2][0]==='"';kv[m[1]]={v:q?m[2].slice(1,-1):m[2],s:m.indices[2][0]+(q?1:0),e:m.indices[2][1]-(q?1:0),ks:m.indices[1][0]}}
+ const map=[],val={};
+ for(const[vf,path]of p.map)if(kv[vf]){map.push([vf,path,kv[vf].s,kv[vf].e]);val[path]=kv[vf].v}
+ if(!map.length)return{ok:false,reason:'None of the mapped vendor fields were found'};
+ let ts=`${DATE}T${clockStr()}Z`;
+ if(kv.date&&kv.time&&/^\d{4}-\d\d-\d\d$/.test(kv.date.v)){ts=`${kv.date.v}T${kv.time.v}Z`;map.push(['date + time','timestamp',kv.date.ks,kv.time.e])}
+ const act=val['event.action']?actNorm(val['event.action']):'log',net={sip:val['network.source_ip']||null,sport:val['network.source_port']?+val['network.source_port']:null,dip:val['network.destination_ip']||null,dport:val['network.destination_port']?+val['network.destination_port']:null,proto:val['network.protocol']?val['network.protocol'].toLowerCase():null};
+ const den=act==='deny'||act==='block',type=net.sip&&net.dip?(den?'network.connection.denied':'network.connection.allowed'):'system.log.message';
+ return{ok:true,parserId:p.id,fmt:p.fmt,vendor:p.vendor,product:p.product,device:val['source.device']||p.product,label:`${p.vendor} ${p.product}`,type,category:type.startsWith('network')?'network':'system',ts,severity:val['event.severity']?sevName(val['event.severity']):den?'medium':'info',action:act,net,map,title:type==='network.connection.denied'?tNet(net.proto,'denied',net.sip,net.dip,net.dport):`${p.vendor} ${p.product} event`};
+}
+const PF={asa:pASA,forti:pForti,cef:pCEF,json:pJSON,syslog:pSys};
+
+/* ---------- detection + pipeline ---------- */
+function detect(t){
+ if(/^CEF:\d/.test(t))return{id:'cef',conf:98,why:'CEF:0 header found'};
+ if(/^\{/.test(t))return{id:'json',conf:97,why:'JSON object found'};
+ if(/%ASA-\d-\d+/.test(t))return{id:'asa',conf:99,why:'%ASA-n-nnnnnn message ID found'};
+ if(/\bdevname=/.test(t)&&/\b(type|logid)=/.test(t))return{id:'forti',conf:96,why:'devname and type key-value pairs found'};
+ if(/^(<\d+>)?[A-Z][a-z]{2}\s+\d{1,2}\s\d\d:\d\d:\d\d\s\S+\s/.test(t))return{id:'syslog',conf:88,why:'RFC 3164 syslog header found'};
+ for(const p of PARSERS)if(p.custom&&p.test(t))return{id:p.id,conf:91,why:'Registered parser signature matched'};
+ return null;
+}
+function run(raw,forced){
+ const t=raw.trim(),line=/^\{/.test(t)?t:t.split(/\r?\n/)[0].trim();
+ const det=forced&&forced!=='auto'?{id:forced,conf:100,why:'Parser selected manually',forced:true}:detect(line);
+ if(!det)return{ok:false,stage:0,reason:'No registered parser matched this log format',fmt:'Unknown',parserId:null};
+ const P=PARSERS.find(p=>p.id===det.id);
+ const res=P.custom?pCust(P,line):PF[det.id](line);
+ if(!res.ok)return{...res,stage:2,parserId:det.id,fmt:P.fmt,det,parserName:P.name+' Parser',ver:P.ver};
+ res.map.sort((a,b)=>ORDER.indexOf(a[1])-ORDER.indexOf(b[1]));
+ return{...res,det,parserName:P.name+' Parser',ver:P.ver,ms:+(1+((line.length*7)%19)/10).toFixed(1),fields:res.map.length};
+}
+const getP=(o,p)=>p.split('.').reduce((a,k)=>a==null?a:a[k],o);
+function U(e){const r=e.r;if(!r.ok)return null;const n=r.net||{};
+ return{event_id:e.id,timestamp:r.ts,
+  source:{vendor:r.vendor,product:r.product,device:r.device,format:r.fmt},
+  event:{type:r.type,category:r.category,severity:r.severity,action:r.action},
+  network:{source_ip:n.sip??null,source_port:n.sport??null,destination_ip:n.dip??null,destination_port:n.dport??null,protocol:n.proto??null},
+  processing:{parser:r.parserName,parser_version:r.ver,schema_version:SCHEMA},
+  raw:{preserved:true,original_event:e.raw}}}
+
+/* ---------- events ---------- */
+const E=[];let seq=43;
+const mkEv=(id,rx,raw,forced)=>{raw=raw.trim();const r=run(raw,forced);return{id,rx,raw,r,ok:r.ok,proc:`${DATE} ${rx}.${String((rx.length*97+raw.length*13)%900+100)} UTC`}};
+const evTs=e=>e.r.ok?e.r.ts.replace('T',' ').replace('Z',''):`${DATE} ${e.rx}`;
+const evSev=e=>e.r.ok?e.r.severity:'unknown';
+const evSrc=e=>e.r.ok?e.r.label:'Unidentified source';
+const evType=e=>e.r.ok?(TL[e.r.type]||e.r.type):'Unclassified';
+const evFmt=e=>e.r.fmt||'Unknown';
+const evPar=e=>e.r.ok?`${e.r.parserName} v${e.r.ver}`:'—';
+const SEED=[
+['ULPF-00042','09:18:04',`<164>Sep 20 2026 09:18:04 fw-edge-01 : %ASA-4-106023: Deny tcp src outside:198.51.100.23/49152 dst inside:10.10.5.20/3389 by access-group "OUTSIDE_IN" [0x0, 0x0]`],
+['ULPF-00041','09:17:48',`CEF:0|Imperva|SecureSphere|14.7|WAF|SQL Injection Attempt|9|rt=1789895868000 src=203.0.113.77 spt=41822 dst=172.16.8.21 dpt=443 proto=TCP act=blocked`],
+['ULPF-00040','09:17:21',`{"ts":"2026-09-20T09:17:21Z","app":"vpn-gateway","evt":"login_failed","user":"svc_backup","level":"warn","client_ip":"198.51.100.23","client_port":50113,"server_ip":"10.40.0.5","server_port":443,"proto":"tcp","result":"denied"}`],
+['ULPF-00039','09:17:05',`date=2026-09-20 time=09:17:05 devname="FGT-DC-02" devid="FGT60F0000000001" type="traffic" subtype="forward" level="notice" srcip=192.168.30.12 srcport=53114 dstip=172.16.8.40 dstport=53 proto=17 action="accept" service="DNS"`],
+['ULPF-00038','09:16:33',`txn=88231 mod=billing rc=ERR_TIMEOUT retry=3 host=10.60.8.14`],
+['ULPF-00037','09:16:18',`<165>Sep 20 2026 09:16:18 fw-edge-01 : %ASA-5-111008: User 'admin' executed the 'logging trap informational' command.`],
+['ULPF-00036','09:16:02',`{"ts":"2026-09-20T09:16:02Z","app":"vpn-gateway","evt":"login_success","user":"r.mehta","level":"info","client_ip":"10.40.1.9","client_port":61208,"server_ip":"10.40.0.5","server_port":443,"proto":"tcp","result":"allowed"}`],
+['ULPF-00035','09:15:40',`CEF:0|Palo Alto Networks|PAN-OS|10.2.4|spyware|Spyware Phone Home Detected|8|rt=1789895740000 src=10.30.2.15 spt=55021 dst=45.33.32.156 dpt=53 proto=UDP act=alert`],
+['ULPF-00034','09:15:19',`<36>Sep 20 09:15:19 app-srv-07 sshd[2291]: Failed password for invalid user admin from 198.51.100.23 port 40122 ssh2`],
+['ULPF-00033','09:15:03',`date=2026-09-20 time=09:15:03 devname="FGT-DC-02" devid="FGT60F0000000001" type="utm" subtype="ips" severity="critical" srcip=203.0.113.77 srcport=49832 dstip=172.16.8.21 dstport=445 proto=6 action="dropped" attack="SMB.Trans2.Remote.Code.Exec"`],
+['ULPF-00032','09:14:47',`date=2026-09-20 time=09:14:47 devname="FGT-DC-02" devid="FGT60F0000000001" type="traffic" subtype="forward" level="warning" srcip=192.168.30.44 srcport=52344 dstip=185.199.110.153 dstport=443 proto=6 action="deny" policyid=14 service="HTTPS"`],
+['ULPF-00031','09:14:31',`<166>Sep 20 2026 09:14:31 fw-edge-01 : %ASA-6-302013: Built inbound TCP connection 884213 for outside:203.0.113.45/51322 (203.0.113.45/51322) to inside:10.20.4.18/443 (192.0.2.10/443)`],
+['ULPF-00030','09:13:52',`<189>Sep 20 09:13:52 sw-core-02 %LINK-3-UPDOWN: Interface GigabitEthernet1/0/12, changed state to down`],
+['ULPF-00029','09:13:20',`CEF:0|Palo Alto Networks|PAN-OS|10.2.4|threat`],
+['ULPF-00028','09:12:41',`<38>Sep 20 09:12:41 app-srv-07 sshd[2210]: Accepted publickey for deploy from 10.40.1.22 port 51834 ssh2: RSA SHA256:8Yv3kQm1Zt`]
+];
+SEED.forEach(s=>E.push(mkEv(...s)));
+
+/* ---------- samples (also used by the simulated live ingest) ---------- */
+const SAMPLES=[
+{k:'asa',label:'Cisco ASA Syslog',forced:'asa',gen:[
+ t=>`<164>Sep 20 2026 ${t} fw-edge-01 : %ASA-4-106023: Deny tcp src outside:198.51.100.23/49152 dst inside:10.10.5.20/3389 by access-group "OUTSIDE_IN" [0x0, 0x0]`,
+ t=>`<166>Sep 20 2026 ${t} fw-edge-01 : %ASA-6-302013: Built inbound TCP connection 884213 for outside:203.0.113.45/51322 (203.0.113.45/51322) to inside:10.20.4.18/443 (192.0.2.10/443)`,
+ t=>`<166>Sep 20 2026 ${t} fw-edge-01 : %ASA-6-302014: Teardown TCP connection 884213 for outside:203.0.113.45/51322 to inside:10.20.4.18/443 duration 0:00:31 bytes 4812 TCP FINs`]},
+{k:'forti',label:'Fortinet Syslog',forced:'forti',gen:[
+ t=>`date=2026-09-20 time=${t} devname="FGT-DC-02" devid="FGT60F0000000001" type="traffic" subtype="forward" level="warning" srcip=192.168.30.44 srcport=52344 dstip=185.199.110.153 dstport=443 proto=6 action="deny" policyid=14 service="HTTPS"`,
+ t=>`date=2026-09-20 time=${t} devname="FGT-DC-02" devid="FGT60F0000000001" type="traffic" subtype="forward" level="notice" srcip=192.168.30.12 srcport=53114 dstip=172.16.8.40 dstport=53 proto=17 action="accept" service="DNS"`,
+ t=>`date=2026-09-20 time=${t} devname="FGT-DC-02" devid="FGT60F0000000001" type="utm" subtype="ips" severity="critical" srcip=203.0.113.77 srcport=49832 dstip=172.16.8.21 dstport=445 proto=6 action="dropped" attack="SMB.Trans2.Remote.Code.Exec"`]},
+{k:'cef',label:'Palo Alto CEF',forced:'cef',gen:[
+ t=>`CEF:0|Palo Alto Networks|PAN-OS|10.2.4|spyware|Spyware Phone Home Detected|8|rt=${epochMs()} src=10.30.2.15 spt=55021 dst=45.33.32.156 dpt=53 proto=UDP act=alert`,
+ t=>`CEF:0|Imperva|SecureSphere|14.7|WAF|SQL Injection Attempt|9|rt=${epochMs()} src=203.0.113.77 spt=41822 dst=172.16.8.21 dpt=443 proto=TCP act=blocked`]},
+{k:'json',label:'Generic JSON',forced:'json',gen:[
+ t=>`{"ts":"2026-09-20T${t}Z","app":"vpn-gateway","evt":"login_failed","user":"svc_backup","level":"warn","client_ip":"198.51.100.23","client_port":50113,"server_ip":"10.40.0.5","server_port":443,"proto":"tcp","result":"denied"}`,
+ t=>`{"ts":"2026-09-20T${t}Z","app":"vpn-gateway","evt":"login_success","user":"r.mehta","level":"info","client_ip":"10.40.1.9","client_port":61208,"server_ip":"10.40.0.5","server_port":443,"proto":"tcp","result":"allowed"}`]},
+{k:'syslog',label:'Linux Syslog',forced:'syslog',gen:[
+ t=>`<36>Sep 20 ${t} app-srv-07 sshd[2291]: Failed password for invalid user admin from 198.51.100.23 port 40122 ssh2`,
+ t=>`<38>Sep 20 ${t} app-srv-07 sshd[2210]: Accepted publickey for deploy from 10.40.1.22 port 51834 ssh2: RSA SHA256:8Yv3kQm1Zt`,
+ t=>`<189>Sep 20 ${t} sw-core-02 %LINK-3-UPDOWN: Interface GigabitEthernet1/0/12, changed state to down`]}
+];
+
+/* ---------- statistics ---------- */
+const S={total:12482,ok:12451,fail:31,
+ src:{'Cisco ASA':4912,'Fortinet':3687,'VPN Gateway':1204,'Palo Alto':1102,'Imperva WAF':744,'Linux Server':511,'Generic Network Device':291,'Requires review':31},
+ fmt:{Syslog:9405,CEF:1852,JSON:1206,Unknown:19},
+ sev:{critical:412,high:1268,medium:3905,low:2710,info:4156},
+ par:{asa:[4912,1],forti:[3687,3],cef:[1846,6],json:[1204,2],syslog:[802,0],none:[0,19]}};
+function tally(e){const r=e.r;S.total++;
+ if(r.ok){S.ok++;S.src[r.label]=(S.src[r.label]||0)+1;S.fmt[r.fmt]=(S.fmt[r.fmt]||0)+1;S.sev[r.severity]++;(S.par[r.parserId]||(S.par[r.parserId]=[0,0]))[0]++}
+ else{S.fail++;S.src['Requires review']++;const f=r.fmt||'Unknown';S.fmt[f]=(S.fmt[f]||0)+1;(S.par[r.parserId||'none']||(S.par[r.parserId||'none']=[0,0]))[1]++}}
+const prep=(raw,forced)=>{clock+=4+(raw.length%7);return mkEv('ULPF-'+String(seq++).padStart(5,'0'),clockStr(),raw,forced)};
+const commit=e=>{E.unshift(e);if(E.length>300)E.pop();tally(e);return e};
+const ingest=(raw,forced)=>commit(prep(raw,forced));
+
+/* ===== UI ===== */
+const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
+const esc=s=>String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+const nf=n=>n.toLocaleString('en-US');
+const rxe=s=>s.replace(/[.*+?^${}()|[\]\\]/g,'\\$&');
+const RM=typeof matchMedia!=='undefined'&&matchMedia('(prefers-reduced-motion: reduce)').matches;
+const sleep=ms=>new Promise(r=>setTimeout(r,RM?0:ms));
+const IC={layers:'<path d="M12 3 3 8l9 5 9-5-9-5Z"/><path d="m3 13 9 5 9-5"/>',search:'<circle cx="11" cy="11" r="6"/><path d="m20 20-4-4"/>',code:'<path d="m9 8-5 4 5 4M15 8l5 4-5 4"/>',funnel:'<path d="M3 5h18l-7 8v6l-4-2v-4L3 5Z"/>',grid:'<rect x="4" y="4" width="7" height="7" rx="1.5"/><rect x="13" y="4" width="7" height="7" rx="1.5"/><rect x="4" y="13" width="7" height="7" rx="1.5"/><rect x="13" y="13" width="7" height="7" rx="1.5"/>',swap:'<path d="M4 8h13l-3-3M20 16H7l3 3"/>',bars:'<path d="M5 20V10M12 20V4M19 20v-7"/>',shield:'<path d="M12 3 5 6v5c0 4.5 3 8 7 10 4-2 7-5.5 7-10V6l-7-3Z"/><path d="m9 12 2 2 4-4"/>',plug:'<path d="M9 3v5M15 3v5M7 8h10v3a5 5 0 0 1-10 0V8ZM12 16v5"/>',check:'<path d="m5 12 4.5 4.5L19 7"/>',arrow:'<path d="M5 12h14M13 6l6 6-6 6"/>',link:'<path d="M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1"/><path d="M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1-1"/>',lock:'<rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/>',back:'<path d="m15 6-6 6 6 6"/>',plus:'<path d="M12 5v14M5 12h14"/>',home:'<path d="m3 11 9-8 9 8"/><path d="M5 10v10h14V10"/>',list:'<path d="M8 6h12M8 12h12M8 18h12M4 6h.01M4 12h.01M4 18h.01"/>',file:'<path d="M7 3h7l5 5v13H7z"/><path d="M14 3v5h5"/>',cursor:'<path d="m5 4 6 15 2-6 6-2L5 4Z"/>',x:'<path d="M6 6l12 12M18 6 6 18"/>',play:'<path d="m7 4 13 8-13 8z"/>',trash:'<path d="M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13"/>'};
+const ic=(n,s=18)=>`<svg width="${s}" height="${s}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${IC[n]}</svg>`;
+const SEVN={critical:'Critical',high:'High',medium:'Medium',low:'Low',info:'Info',unknown:'Unknown'};
+const sevP=s=>`<span class="sev ${s}"><i></i>${SEVN[s]}</span>`;
+const stP=e=>e.ok?'<span class="st ok"><i></i>Parsed</span>':'<span class="st bad"><i></i>Failed</span>';
+const ini=s=>s.split(/\s+/).map(w=>w[0]).join('').slice(0,2).toUpperCase();
+const srcCell=e=>`<div class="srcc"><span class="av ${e.ok?'':'g'}">${ini(evSrc(e))}</span>${esc(evSrc(e))}</div>`;
+const hash=s=>{let h=[0x811c9dc5,0x1b873593,0xcc9e2d51,0x85ebca6b];for(let i=0;i<s.length;i++)for(let j=0;j<4;j++)h[j]=Math.imul(h[j]^(s.charCodeAt(i)+j),16777619)>>>0;return h.map(x=>x.toString(16).padStart(8,'0')).join('')};
+const sha=e=>{const h=hash(e.raw);return h.slice(0,8)+'…'+h.slice(-6)};
+const byteLen=s=>typeof TextEncoder!=='undefined'?new TextEncoder().encode(s).length:s.length;
+let tt;const toast=m=>{const t=$('#toast');t.textContent=m;t.classList.add('on');clearTimeout(tt);tt=setTimeout(()=>t.classList.remove('on'),3200)};
+const hueA=p=>`data-f="${p}" data-h="${HUE[p]??0}"`;
+
+/* ---------- raw + universal rendering ---------- */
+function hlRaw(raw,map){const sp=map.map(([vf,path,s,e])=>[s,e,path]).sort((a,b)=>a[0]-b[0]||b[1]-a[1]);let o='',p=0;
+ for(const[s,e,f]of sp){if(s<p)continue;o+=esc(raw.slice(p,s))+`<mark ${hueA(f)}>${esc(raw.slice(s,e))}</mark>`;p=e}return o+esc(raw.slice(p))}
+function jsonH(u,marks){
+ const jv=(v,p)=>{const s=v===null?'<span class="nl">null</span>':typeof v==='string'?`<span class="s">"${esc(JSON.stringify(v).slice(1,-1))}"</span>`:typeof v==='boolean'?`<span class="b">${v}</span>`:`<span class="n">${v}</span>`;return marks.has(p)&&v!==null?`<mark ${hueA(p)}>${s}</mark>`:s};
+ const walk=(o,path,d)=>{const ks=Object.keys(o),pad='  '.repeat(d);return '{\n'+ks.map((k,i)=>{const p=path?path+'.'+k:k,v=o[k];return `${pad}<span class="k">"${k}"</span>: ${v&&typeof v==='object'?walk(v,p,d+1):jv(v,p)}${i<ks.length-1?',':''}`}).join('\n')+'\n'+'  '.repeat(d-1)+'}'};
+ return walk(u,'',1)}
+const uniJson=e=>jsonH(U(e),new Set(e.r.map.map(m=>m[1])));
+const valH=v=>v===null||v===undefined?'<span class="nl">null</span>':typeof v==='number'?`<span class="n">${v}</span>`:`<span class="s">"${esc(v)}"</span>`;
+
+/* ---------- stage model ---------- */
+const STL=['Detecting source','Parser selected','Fields extracted','Fields mapped','Normalization complete'];
+function stageStates(e){const r=e.r;let s;
+ if(r.ok)s=[{s:'done',d:`${r.label} (${r.fmt}), ${r.det.conf}% confidence`},{s:'done',d:`${r.parserName} v${r.ver}`},{s:'done',d:`${r.fields} fields extracted`},{s:'done',d:`${r.fields} fields mapped to Schema v${SCHEMA}`},{s:'done',d:`${e.id} created in ${r.ms} ms`}];
+ else if(r.stage===0)s=[{s:'fail',d:r.reason},{s:'skip',d:'Not reached'},{s:'skip',d:'Not reached'},{s:'skip',d:'Not reached'},{s:'skip',d:'Raw event kept for review'}];
+ else s=[{s:'done',d:`${r.fmt} format detected`},{s:'done',d:`${r.parserName} v${r.ver}`},{s:'fail',d:r.reason},{s:'skip',d:'Not reached'},{s:'skip',d:'Raw event kept for review'}];
+ return s.map((x,i)=>({...x,t:STL[i]}))}
+const stgIcon=s=>s==='done'?ic('check',14):s==='fail'?ic('x',14):s==='run'?'<span class="spin"></span>':s==='skip'?'–':'';
+function stages(list){$('#pr-stp').innerHTML=list.map(x=>`<div class="sg1 ${x.s}"><div class="dt">${stgIcon(x.s)}</div><b>${x.t}</b><small>${x.s==='run'?'In progress':x.s==='wait'?'Waiting':esc(x.d)}</small></div>`).join('')}
+
+/* ---------- log processing: result view ---------- */
+function resultHTML(e){
+ const r=e.r,ok=r.ok,st=stageStates(e),bytes=byteLen(e.raw);
+ const raw=`<div class="card pcard raw"><div class="ch"><span class="ic">${ic('file')}</span><h2>Raw event</h2><span class="chip">${esc(evFmt(e))}</span></div><div class="cb">
+  <pre class="code">${ok?hlRaw(e.raw,r.map):esc(e.raw)}</pre>
+  <dl class="kv"><div><dt>Detected format</dt><dd>${esc(evFmt(e))}</dd></div><div><dt>Detected source</dt><dd>${ok?esc(r.label):'Unidentified'}</dd></div><div><dt>Device</dt><dd>${ok?esc(r.device):'Unknown'}</dd></div><div><dt>Detection confidence</dt><dd>${r.det?r.det.conf+'%':'None'}</dd></div><div><dt>Size</dt><dd>${bytes} bytes</dd></div><div><dt>Checksum</dt><dd class="m">${sha(e)}</dd></div></dl></div></div>`;
+ const pn=r.parserName?`${r.parserName} v${r.ver}`:'No parser matched';
+ const tk=(i,t)=>`<li class="${st[i].s==='fail'?'bad':st[i].s==='skip'?'skip':''}"><span class="tick ${st[i].s==='fail'?'bad':st[i].s==='skip'?'skip':''}">${st[i].s==='done'?ic('check',14):st[i].s==='fail'?ic('x',14):'–'}</span><div><b>${t}</b><small>${esc(st[i].d)}</small></div></li>`;
+ const par=`<div class="card pcard"><div class="ch"><span class="ic">${ic('code')}</span><h2>Parser</h2><span class="chip pri">${r.ver?'v'+r.ver:'None'}</span></div><div class="cb">
+  <div class="pname"><div class="ti">${ic('plug',22)}</div><div><b>${esc(pn)}</b>${r.parserName?'<span class="st ok"><i></i>Active</span>':'<span class="st bad"><i></i>Requires review</span>'}</div></div>
+  <ul class="steps">${tk(0,'Source detected')}${tk(2,'Fields extracted')}${tk(3,'Fields mapped')}</ul>
+  ${ok?`<div class="mml"><h3>Vendor field to universal field</h3>${r.map.map(([vf,p])=>`<div class="mm" ${hueA(p)}><code>${esc(vf)}</code>${ic('arrow',12)}<code class="up">${p}</code></div>`).join('')}</div>`:`<div class="empty"><b>Queued for review</b><p>${esc(r.reason)}. The raw event is retained unchanged.</p></div>`}
+ </div></div>`;
+ const uni=`<div class="card pcard nrm"><div class="ch"><span class="ic">${ic('grid')}</span><h2>Universal event</h2><span class="chip pri">Schema v${SCHEMA}</span></div><div class="cb">
+  ${ok?`<pre class="code">${uniJson(e)}</pre><p class="note">Every source produces the same fields, whatever the vendor or format.</p>`:`<div class="empty"><b>No universal event created</b><p>Nothing was normalized. The original raw event is stored and linked to ${e.id} so it can be reprocessed once a parser is available.</p><p style="margin-top:12px"><button class="btn sm" data-act="failed">${ic('list',14)}Review failed events</button></p></div>`}</div></div>`;
+ const lk=`<div class="lk"><span>${ic('arrow',15)}</span></div>`;
+ return `<div class="flow">${raw}${lk}${par}${lk}${uni}</div>
+ <div class="keep"><div class="big">${ic('check',22)}</div><div><h3>Original Raw Event Preserved</h3><p>${ok?'Stored unmodified next to the universal event.':'No parser matched, but the raw event is stored unmodified.'}</p></div>
+ <div class="r"><small>Traceable Event ID</small><span class="chip">${e.id}</span><button class="btn pri" data-ev="${e.id}">View event details</button></div></div>`}
+
+/* ---------- screens: shells ---------- */
+$('#mk').innerHTML=ic('layers',20);
+const NAV=[['overview','Overview','home'],['process','Log Processing','funnel'],['events','Events','list'],['registry','Parser Registry','plug'],['schema','Schema Explorer','grid'],['analytics','Analytics','bars']];
+$('#nav').innerHTML=NAV.map(([k,t,i])=>`<button data-go="${k}">${ic(i)}${t}</button>`).join('');
+
+const STG=[['layers','Log Sources'],['search','Detection','Identifies the log format and the device that produced it.'],['code','Parser Framework','Source-specific parsers extract every field.'],['funnel','Normalization','Maps vendor fields to common names and values.'],['grid','Universal Schema','One event structure for every source.','core'],['swap','API','Serves normalized events and their raw originals.'],['bars','Analytics','Search, filter and report across all sources.']];
+$('#s-overview').innerHTML=`
+<div class="hd ovh"><div><span class="tag">${ic('file',14)}NTRO Problem Statement 26156</span><h1>Universal Log Pre-processing Framework</h1><p class="sub">Transform heterogeneous security logs into a standardized, lossless and analytics-ready representation.</p></div><div class="card sys" id="ov-sys"></div></div>
+<div class="card"><div class="pipe">${STG.map(([i,t,d,c])=>`<div class="node ${c||''}"><div class="ti">${ic(i,19)}</div><h3>${t}</h3>${d?`<p>${d}</p>`:`<div class="srcs">${['Cisco ASA','Fortinet','Syslog','CEF','JSON'].map(s=>`<span><i></i>${s}</span>`).join('')}</div>`}</div>`).join('')}</div>
+<div class="lane"><span>${ic('shield',16)}Original raw event preserved unchanged at every stage</span></div></div>
+<div class="kpis" id="ov-kpis"></div>
+<div class="card" style="margin-top:18px"><div class="ch"><span class="ic">${ic('list')}</span><h2>Recent processing activity</h2><button class="btn sm" data-go="events">View all events</button></div>
+ <div class="tw"><table style="min-width:640px"><thead><tr><th>Received</th><th>Event ID</th><th>Source</th><th>Format</th><th>Result</th><th>Time taken</th></tr></thead><tbody id="ov-act"></tbody></table></div></div>
+<div class="caps" id="ov-caps"></div>`;
+
+const kpiH=()=>`<div class="card kpi"><small>Events processed</small><b>${nf(S.total)}</b><span>All sources and formats</span></div>
+<div class="card kpi"><small>Successfully normalized</small><b>${nf(S.ok)}</b><span>Universal events created</span></div>
+<button class="card kpi bad" data-act="failed" title="Show failed events"><small>Failed / requires review</small><b>${nf(S.fail)}</b><span>Raw events retained. Review failed events</span></button>
+<div class="card kpi"><small>Processing success rate</small><b>${(S.ok/S.total*100).toFixed(1)}%</b><div class="bar"><i style="width:${S.ok/S.total*100}%"></i></div></div>`;
+function ovLive(){
+ $('#ov-sys').innerHTML=`<div class="sd"><i></i>System status<span>Operational</span></div><dl><div><dt>Parsers active</dt><dd>${PARSERS.length} of ${PARSERS.length}</dd></div><div><dt>Schema</dt><dd>v${SCHEMA}</dd></div><div><dt>Avg processing</dt><dd>1.9 ms</dd></div></dl>`;
+ $('#ov-kpis').innerHTML=kpiH();
+ $('#ov-act').innerHTML=E.slice(0,7).map(e=>`<tr data-ev="${e.id}" tabindex="0"><td class="ts">${e.rx}</td><td><span class="chip">${e.id}</span></td><td>${srcCell(e)}</td><td><span class="fmt">${esc(evFmt(e))}</span></td><td>${e.ok?`Normalized by ${esc(evPar(e))}`:`<span class="st bad"><i></i>Needs review</span> <span class="mut">${esc(e.r.reason)}</span>`}</td><td class="mut">${e.ok?e.r.ms+' ms':'Not normalized'}</td></tr>`).join('');
+ const CAP=[['shield','Lossless Processing','Every original event is stored exactly as received and linked to its universal event.','Raw and normalized events stay linked'],['funnel','Universal Normalization','Events from different vendors and formats share one schema and common field names.','Same fields for every source'],['plug','Plug-and-Play Parsers','Support a new log source by registering a parser. The core framework stays untouched.',`${PARSERS.length} parsers registered`],['bars','Analytics Ready','Consistent events can be searched, filtered and aggregated across all sources together.',`${nf(S.total)} events processed`]];
+ $('#ov-caps').innerHTML=CAP.map(([i,t,d,e])=>`<div class="card cap"><div class="ti">${ic(i,20)}</div><h3>${t}</h3><p>${d}</p><div class="ev">${ic('check',15)}${e}</div></div>`).join('')}
+
+/* ---------- log processing ---------- */
+$('#s-process').innerHTML=`
+<div class="hd"><h1>Log Processing</h1><p class="sub">Paste a raw log or load a sample. ULPF detects the source, selects a parser and builds a universal event while keeping the original untouched.</p></div>
+<div class="card"><div class="ch"><span class="ic">${ic('file')}</span><h2>Process new event</h2><label class="inl">Source<select id="pr-src" aria-label="Source"></select></label></div>
+ <div class="cb"><div class="chips" id="pr-chips"></div>
+ <textarea class="ta" id="pr-ta" rows="4" spellcheck="false" placeholder="Paste a raw log event here" aria-label="Raw log"></textarea>
+ <div class="prf"><p class="note">Auto Detect identifies the format and source from the log itself. The original text is stored exactly as received.</p><div><button class="btn" data-act="clear">Clear</button><button class="btn pri" id="pr-go" data-act="process">${ic('play',14)}Process Event</button></div></div></div></div>
+<div class="card stg"><div class="ch"><h2>Processing pipeline</h2><span class="chip" id="pr-tm"></span></div><div class="stp" id="pr-stp"></div></div>
+<div id="pr-out"></div>`;
+function buildSamples(){
+ const cur=$('#pr-src').value||'auto';
+ $('#pr-src').innerHTML='<option value="auto">Auto Detect</option>'+SAMPLES.map(s=>`<option value="${s.forced}">${esc(s.label)}</option>`).join('');
+ $('#pr-src').value=[...$('#pr-src').options].some(o=>o.value===cur)?cur:'auto';
+ $('#pr-chips').innerHTML='<span class="lbl">Load sample</span>'+SAMPLES.map(s=>`<button class="sc" data-act="sample" data-k="${s.k}">${esc(s.label)}</button>`).join('')}
+function showResult(e){$('#pr-tm').textContent=e.id;stages(stageStates(e));$('#pr-out').innerHTML=resultHTML(e)}
+let busy=false;
+async function processNow(){
+ if(busy)return;const raw=$('#pr-ta').value;
+ if(!raw.trim()){toast('Paste a raw log or load a sample first');$('#pr-ta').focus();return}
+ busy=true;$('#pr-go').disabled=true;$('#pr-tm').textContent='Processing';
+ const e=prep(raw,$('#pr-src').value),st=stageStates(e),cur=STL.map(t=>({s:'wait',t,d:''}));
+ $('#pr-out').innerHTML='';stages(cur);
+ for(let i=0;i<5;i++){
+  cur[i]={s:'run',t:STL[i],d:''};stages(cur);await sleep(340);
+  cur[i]=st[i];
+  if(st[i].s==='fail'){for(let j=i+1;j<5;j++)cur[j]=st[j];stages(cur);break}
+  stages(cur)}
+ commit(e);showResult(e);busy=false;$('#pr-go').disabled=false;
+ toast(e.ok?`${e.id} normalized by ${e.r.parserName}`:`${e.id} could not be parsed. Raw event preserved`);
+ $('#pr-stp').closest('.card').scrollIntoView({behavior:RM?'auto':'smooth',block:'start'})}
+
+/* ---------- events ---------- */
+const F={q:'',src:'',fmt:'',sev:'',type:'',st:''};
+$('#s-events').innerHTML=`<div class="hd"><h1>Events</h1><p class="sub">Every normalized event stays linked to its original raw record. Select an event to see both.</p></div>
+<div class="filters" id="filters"></div><div class="card tw"><table><thead><tr><th>Timestamp</th><th>Source</th><th>Format</th><th>Event Type</th><th>Severity</th><th>Parser</th><th>Status</th></tr></thead><tbody id="evb"></tbody></table></div>`;
+function buildFilters(){
+ const base=['Cisco ASA','Fortinet','Palo Alto','Imperva WAF','VPN Gateway','Linux Server','Generic Network Device'];
+ const srcs=[...new Set([...base,...E.map(evSrc)])],types=[...new Set(E.map(evType))].sort(),fmts=[...new Set(['Syslog','CEF','JSON',...E.map(evFmt)])];
+ const sel=(k,l,list,f)=>`<label>${l}<select data-fk="${k}" aria-label="${l}"><option value="">All</option>${list.map(x=>`<option value="${esc(x)}"${F[k]===x?' selected':''}>${esc(f?f(x):x)}</option>`).join('')}</select></label>`;
+ $('#filters').innerHTML=`<label class="grow">Search<input class="tx" id="ev-q" value="${esc(F.q)}" placeholder="Event ID, IP address, source or text in the raw log" aria-label="Search events"></label>`
+  +sel('src','Source',srcs)+sel('fmt','Format',fmts)+sel('sev','Severity',['critical','high','medium','low','info','unknown'],x=>SEVN[x])+sel('type','Event Type',types)+sel('st','Status',['parsed','failed'],x=>x[0].toUpperCase()+x.slice(1))+'<span class="count" id="cnt"></span>'}
+function evTable(){
+ const q=F.q.trim().toLowerCase();
+ const r=E.filter(e=>(!F.src||evSrc(e)===F.src)&&(!F.fmt||evFmt(e)===F.fmt)&&(!F.sev||evSev(e)===F.sev)&&(!F.type||evType(e)===F.type)&&(!F.st||(F.st==='parsed')===e.ok)&&(!q||(e.id+' '+e.raw+' '+evSrc(e)+' '+evType(e)+' '+evFmt(e)+' '+(e.ok?e.r.type+' '+Object.values(e.r.net).join(' '):e.r.reason)).toLowerCase().includes(q)));
+ $('#evb').innerHTML=r.map(e=>`<tr tabindex="0" data-ev="${e.id}"><td class="ts">${evTs(e)}</td><td>${srcCell(e)}</td><td><span class="fmt">${esc(evFmt(e))}</span></td><td>${esc(evType(e))}</td><td>${sevP(evSev(e))}</td><td class="mut">${esc(evPar(e))}</td><td>${stP(e)}</td></tr>`).join('')||`<tr><td colspan="7" class="mut" style="text-align:center;padding:32px">No events match these filters. <button class="btn sm" data-act="clearf">Clear filters</button></td></tr>`;
+ $('#cnt').textContent=`Showing ${r.length} of ${E.length} recent events`}
+function showFailed(){Object.keys(F).forEach(k=>F[k]='');F.st='failed';go('events')}
+
+/* ---------- event details ---------- */
+function openEv(id){const e=E.find(x=>x.id===id)||E[0];detail(e);go('detail')}
+function detail(e){
+ const r=e.r,ok=r.ok,u=U(e),P=PARSERS.find(p=>p.id===r.parserId);
+ $('#s-detail').innerHTML=`
+ <div class="crumb"><button data-go="events">${ic('back',16)}Events</button><span>/</span><span>${e.id}</span></div>
+ <div class="hd" style="margin-bottom:22px"><h1>${esc(ok?r.title:'Unrecognized log message')}</h1><div class="meta">${sevP(evSev(e))}<span class="chip">${e.id}</span><span>${evTs(e)} UTC</span><span>${esc(evSrc(e))}</span>${stP(e)}</div></div>
+ <p class="hint">${ic('cursor',15)}Hover a highlighted field or a mapping row to trace it between the raw and normalized event.</p>
+ <div class="pair">
+  <div class="card pcard raw"><div class="ch"><h2>Original raw event</h2><span class="chip teal">${ic('lock',11)}Unmodified</span><span class="chip">${e.id}</span></div><div class="cb"><pre class="code">${ok?hlRaw(e.raw,r.map):esc(e.raw)}</pre><div class="pfoot"><span>${byteLen(e.raw)} bytes</span><span>Format: ${esc(evFmt(e))}</span><span>Checksum ${sha(e)}</span></div></div></div>
+  <div class="bridge" title="Linked by Event ID"><span>${ic('link',17)}</span></div>
+  <div class="card pcard nrm"><div class="ch"><h2>Normalized event</h2><span class="chip pri">Schema v${SCHEMA}</span><span class="chip">${e.id}</span></div><div class="cb">
+   ${ok?`<pre class="code">${uniJson(e)}</pre>`:`<div class="empty"><b>Not normalized</b><p>${esc(r.reason)}. The raw event is retained unchanged and queued for parser review.</p></div>`}</div></div>
+ </div>
+ <div class="card" style="margin-top:20px"><div class="ch"><span class="ic">${ic('arrow')}</span><h2>Field mapping</h2><span class="chip">${ok?r.fields+' fields':'0 fields'}</span></div>
+  ${ok?`<div class="tw"><table class="mt"><thead><tr><th>Vendor field</th><th>Raw value</th><th></th><th>Universal field</th><th>Normalized value</th></tr></thead><tbody>${r.map.map(([vf,p,s,en])=>`<tr class="mr" ${hueA(p)}><td><code>${esc(vf)}</code></td><td class="rv">${esc(e.raw.slice(s,en))}</td><td class="ar">${ic('arrow',14)}</td><td><span class="dot"></span><code class="up">${p}</code></td><td><code>${valH(getP(u,p))}</code></td></tr>`).join('')}</tbody></table></div>`:`<div class="cb"><div class="empty"><b>No fields were mapped</b><p>Field mapping appears here once a parser extracts fields from the event.</p></div></div>`}</div>
+ <div class="card" style="margin-top:20px"><div class="ch"><span class="ic">${ic('link')}</span><h2>Traceability</h2></div>
+  <div class="lin"><span class="chip">Raw event</span>${ic('arrow',14)}<span class="chip pri">${esc(ok?evPar(e):'No parser')}</span>${ic('arrow',14)}<span class="chip">${ok?'Normalized event':'Queued for review'}</span></div>
+  <dl class="tr">
+   <div><dt>Event ID</dt><dd class="m">${e.id}</dd></div><div><dt>Source</dt><dd>${esc(evSrc(e))}${ok?` (${esc(r.device)})`:''}</dd></div><div><dt>Vendor</dt><dd>${ok?esc(r.vendor):'Unknown'}</dd></div><div><dt>Parser</dt><dd>${ok?esc(r.parserName):(r.parserName?esc(r.parserName):'None')}</dd></div>
+   <div><dt>Parser Version</dt><dd>${r.ver||'None'}</dd></div><div><dt>Schema Version</dt><dd>${ok?SCHEMA:'Not applicable'}</dd></div><div><dt>Processed Time</dt><dd class="m">${e.proc}</dd></div>
+   <div><dt>Raw and normalized link</dt><dd class="g">${ic('check',15)}${ok?'Linked by Event ID':'Raw event retained'}</dd></div>
+  </dl></div>`}
+
+/* ---------- parser registry ---------- */
+const DESC={asa:'Cisco ASA firewall',forti:'Fortinet FortiGate firewall',cef:'ArcSight CEF from Palo Alto, Imperva and others',json:'Application and gateway JSON logs',syslog:'Linux servers and network devices'};
+$('#s-registry').innerHTML=`<div class="hd regh"><div><h1>Parser Registry</h1><p class="sub">Each parser is a self-contained module. Register one to support a new log source without changing the framework.</p></div><button class="btn pri" data-act="wiz">${ic('plus',15)}Register New Parser</button></div>
+<div class="card"><div class="tw"><table style="min-width:780px"><thead><tr><th>Parser</th><th>Format</th><th>Detected by</th><th>Version</th><th>Fields mapped</th><th>Events processed</th><th>Status</th></tr></thead><tbody id="regb"></tbody></table></div></div>`;
+function regRender(){$('#regb').innerHTML=PARSERS.map(p=>`<tr><td><div class="srcc"><span class="av ${p.custom?'g':''}">${ini(p.name)}</span><div>${esc(p.name)}<small>${esc(p.custom?p.vendor+' '+p.product:DESC[p.id])}</small></div></div></td><td><span class="fmt">${p.fmt}</span></td><td class="sig">${esc(p.sig)}</td><td class="mut">v${p.ver}</td><td>${p.fields}</td><td style="font-variant-numeric:tabular-nums">${nf((S.par[p.id]||[0])[0])}</td><td><span class="st ok"><i></i>Active</span></td></tr>`).join('')}
+
+/* wizard */
+const MAPPABLE=['source.device','event.severity','event.action','network.source_ip','network.source_port','network.destination_ip','network.destination_port','network.protocol'];
+let W=null;
+const soph=()=>`date=${DATE} time=${clockStr()} log_type="Firewall" action=Drop srcip=185.220.101.4 srcport=44212 dstip=10.10.5.20 dstport=3389 protocol=TCP`;
+function openWiz(){W={step:1,vendor:'Sophos',product:'XG Firewall',fmt:'Syslog (key=value)',rows:[['srcip','network.source_ip'],['dstip','network.destination_ip'],['dstport','network.destination_port'],['action','event.action']],sample:soph(),res:null,busy:false,err:''};$('#modal').hidden=false;drawWiz()}
+function closeWiz(){W=null;$('#modal').hidden=true;$('#modal').innerHTML=''}
+function drawWiz(){
+ const w=W,S3=['Source information','Field mapping','Test'];
+ let body='';
+ if(w.step===1)body=`<label class="fld">Vendor<input data-w="vendor" value="${esc(w.vendor)}" placeholder="e.g. Sophos"></label><label class="fld">Product<input data-w="product" value="${esc(w.product)}" placeholder="e.g. XG Firewall"></label>
+  <label class="fld">Format<select data-w="fmt">${['Syslog (key=value)','Key-value text'].map(f=>`<option${f===w.fmt?' selected':''}>${f}</option>`).join('')}</select></label>
+  <p class="note">The format tells ULPF how to locate vendor fields in the raw event.</p>`;
+ if(w.step===2)body=`<p class="note">Map each vendor field to a field in the Universal Event Schema. The mapped field names also become the parser's detection signature.</p>
+  <div class="mhead"><span>Vendor field</span><span></span><span>Universal field</span><span></span></div>
+  ${w.rows.map((r,i)=>`<div class="mrow"><input data-r="${i}" data-c="0" value="${esc(r[0])}" placeholder="vendor field" aria-label="Vendor field"><span>${ic('arrow',14)}</span><select data-r="${i}" data-c="1" aria-label="Universal field">${MAPPABLE.map(p=>`<option${p===r[1]?' selected':''}>${p}</option>`).join('')}</select><button class="x" data-act="rm" data-i="${i}" aria-label="Remove mapping">${ic('trash',15)}</button></div>`).join('')}
+  <div><button class="btn sm" data-act="addrow">${ic('plus',14)}Add mapping</button></div>`;
+ if(w.step===3){const r=w.res;
+  body=`<label class="fld">Sample log<textarea class="ta" data-w="sample" rows="4" spellcheck="false">${esc(w.sample)}</textarea></label>
+  <div><button class="btn" data-act="test"${w.busy?' disabled':''}>${w.busy?'<span class="spin"></span>Running test':ic('play',14)+'Run Test'}</button></div>
+  ${r&&!w.busy?(r.ok?`<div class="vres okb"><h3>Parser validation successful</h3>
+    <div class="ln"><span class="tick">${ic('check',12)}</span><span>Sample recognized: ${r.pairs} key-value pairs found</span></div>
+    <div class="ln"><span class="tick">${ic('check',12)}</span><span>${r.found.length} of ${w.rows.length} mapped fields extracted</span></div>
+    <div class="ln"><span class="tick">${ic('check',12)}</span><span>Output conforms to Universal Event Schema v${SCHEMA}</span></div>
+    <table class="vt">${r.found.map(([vf,p,v])=>`<tr><td><code>${esc(vf)}</code> to <code>${p}</code></td><td><code>${esc(v)}</code></td></tr>`).join('')}</table></div>`
+   :`<div class="vres badb"><h3>Validation failed</h3><div class="ln"><span class="tick bad">${ic('x',12)}</span><span>${r.miss.length?`Not found in the sample: ${r.miss.map(esc).join(', ')}`:'Add at least one mapping'}</span></div><p class="note">Adjust the mapping or the sample log and run the test again.</p></div>`):''}`}
+ $('#modal').innerHTML=`<div class="dlg" role="dialog" aria-modal="true" aria-label="Register new parser"><div class="dh"><h2>Register new parser</h2>
+  <div class="wz">${S3.map((t,i)=>`<div class="${i+1===w.step?'on':i+1<w.step?'dn2':''}"><i>${i+1<w.step?ic('check',12):i+1}</i>${t}</div>`).join('')}</div></div>
+  <div class="db">${w.err?`<p class="note" style="color:#B4233A">${esc(w.err)}</p>`:''}${body}</div>
+  <div class="df">${w.step>1?'<button class="btn" data-act="wback">Back</button>':''}<span class="sp2"></span><button class="btn" data-act="wcancel">Cancel</button>${w.step<3?'<button class="btn pri" data-act="wnext">Next</button>':`<button class="btn pri" data-act="wreg"${w.res&&w.res.ok&&!w.busy?'':' disabled'}>Register Parser</button>`}</div></div>`;
+ const f=$('#modal input,#modal textarea');if(f&&w.step<3&&!w._f){w._f=1;f.focus()}}
+function wizNext(){
+ if(W.step===1&&(!W.vendor.trim()||!W.product.trim())){W.err='Enter both a vendor and a product.';return drawWiz()}
+ if(W.step===2&&(!W.rows.length||W.rows.some(r=>!r[0].trim()))){W.err='Every mapping needs a vendor field.';return drawWiz()}
+ W.err='';W.step++;W.res=null;drawWiz()}
+async function wizTest(){
+ W.busy=true;drawWiz();await sleep(800);
+ const s=W.sample,found=[],miss=[];
+ W.rows.forEach(([vf,p])=>{const m=s.match(new RegExp('(?:^|\\s)'+rxe(vf.trim())+'=("[^"]*"|\\S+)'));m?found.push([vf.trim(),p,m[1].replace(/^"|"$/g,'')]):miss.push(vf.trim())});
+ W.res={ok:!miss.length&&found.length>0,found,miss,pairs:(s.match(/(?:^|\s)\w+=/g)||[]).length};W.busy=false;drawWiz()}
+function wizRegister(){
+ const rows=W.rows.map(r=>[r[0].trim(),r[1]]),keys=rows.map(r=>r[0]),id='c'+(PARSERS.filter(p=>p.custom).length+1),s=W.sample;
+ const p={id,name:`${W.vendor.trim()} ${W.product.trim()}`,vendor:W.vendor.trim(),product:W.product.trim(),fmt:W.fmt.startsWith('Syslog')?'Syslog':'Key-value',ver:'1.0',fields:rows.length,sig:keys.map(k=>k+'=').join(' '),ms:2.2,custom:true,map:rows,test:t=>keys.every(k=>new RegExp('(?:^|\\s)'+rxe(k)+'=').test(t))};
+ PARSERS.push(p);S.par[id]=[0,0];SAMPLES.push({k:id,label:p.name,forced:id,gen:[t=>s.replace(/time=\d\d:\d\d:\d\d/,'time='+t)]});
+ closeWiz();buildSamples();regRender();toast(`Parser registered: ${p.name}. It is now used by Auto Detect.`)}
+function wizInput(t){
+ if(!W)return;
+ if(t.dataset.w)W[t.dataset.w]=t.value;
+ if(t.dataset.r!==undefined){W.rows[+t.dataset.r][+t.dataset.c]=t.value}}
+
+/* ---------- schema explorer ---------- */
+const SRCN=['Cisco ASA','Fortinet','CEF','Generic JSON','Generic Syslog'];
+const SG=[
+['Event identity',[['event_id','string','Unique, permanent identifier created when the event is ingested. It links the universal event to its preserved raw event.','ULPF-00042',null],['timestamp','string (ISO 8601, UTC)','When the event happened, converted to one format and time zone.','2026-09-20T09:18:04Z',['Syslog header time','date + time','rt','ts','Syslog header time, year assumed']]]],
+['Source',[['source.vendor','string','Company that makes the device or software.','Cisco',['Set by the parser','Set by the parser','DeviceVendor','Set by the parser','Set by the parser']],['source.product','string','Product or application that produced the log.','ASA Firewall',['Set by the parser','Set by the parser','DeviceProduct','app','Program name']],['source.device','string','Host name or device name.','fw-edge-01',['hostname','devname','dvchost','host or app','hostname']],['source.format','string','Original log format, found by detection.','Syslog',null]]],
+['Event',[['event.type','string','What happened, in a dotted name that means the same across vendors.','network.connection.denied',['message ID (106023)','type and subtype','Name','evt','Program and message']],['event.category','string','Broad group the event belongs to, such as network or authentication.','network',null],['event.severity','enum','One of critical, high, medium, low or info.','medium',['ASA-n level','level or severity','Severity (0 to 10)','level','PRI or %FAC-n-']],['event.action','string','What was done, such as allow, deny, block or alert.','deny',['Deny, Built, Teardown','action','act','result','Failed or Accepted']]]],
+['Network',[['network.source_ip','string','Address the traffic came from.','198.51.100.23',['src','srcip','src','client_ip','from address']],['network.source_port','integer','Port on the source side.','49152',['src (address/port)','srcport','spt','client_port','port']],['network.destination_ip','string','Address the traffic was sent to.','10.10.5.20',['dst','dstip','dst','server_ip','Not in message']],['network.destination_port','integer','Port on the destination side.','3389',['dst (address/port)','dstport','dpt','server_port','Not in message']],['network.protocol','string','Lowercase protocol name.','tcp',['protocol in message','proto (6 to tcp)','proto','proto','service (ssh2 to ssh)']]]],
+['Processing',[['processing.parser','string','Parser that normalized the event.','Cisco ASA Parser',null],['processing.parser_version','string','Version of that parser.','1.0',null],['processing.schema_version','string','Version of the Universal Event Schema.','1.0',null]]],
+['Raw',[['raw.preserved','boolean','Always true. The original event is kept for every processed event.','true',null],['raw.original_event','string','The exact text received. It is never changed.','<164>Sep 20 2026 09:18:04 fw-edge-01 : %ASA-4-106023 …',null]]]];
+let selF='network.source_ip';
+$('#s-schema').innerHTML=`<div class="hd"><h1>Schema Explorer</h1><p class="sub">The Universal Event Schema v${SCHEMA}. Every parser writes to these fields, so events from any source can be queried the same way.</p></div>
+<div class="legend"><span>Colored dots match the highlights in the raw and normalized views.</span><span>${ic('cursor',14)} Select a field to see where each source gets it.</span></div>
+<div class="sx"><div class="sgs" id="sgs"></div><div class="card sp" id="sp"></div></div>`;
+function schemaRender(){
+ $('#sgs').innerHTML=SG.map(([g,fs])=>`<div class="card sgc"><div class="ch"><h2>${g}</h2><span class="chip">${fs.length} fields</span></div><div class="cb">${fs.map(([n,t])=>`<button class="fr ${n===selF?'on':''}" data-fld="${n}"><i ${HUE[n]!==undefined?`data-h="${HUE[n]}"`:'class="no"'}></i><code>${n.includes('.')?n.split('.')[1]:n}</code><span class="chip">${t.split(' ')[0]}</span></button>`).join('')}</div></div>`).join('');
+ const f=SG.flatMap(g=>g[1]).find(x=>x[0]===selF),ev=E.find(e=>e.id==='ULPF-00042'),v=getP(U(ev),f[0]);
+ $('#sp').innerHTML=`<div class="ch"><h2>Field details</h2></div><div class="cb"><code class="path">${f[0]}</code>
+  <dl style="margin:0;display:flex;flex-direction:column;gap:14px"><div><dt>Type</dt><dd>${f[1]}</dd></div><div><dt>Description</dt><dd>${f[2]}</dd></div><div><dt>Value in ${ev.id}</dt><dd><code class="chip" style="white-space:normal;overflow-wrap:anywhere">${v===null||v===undefined?'null':esc(String(v)).slice(0,90)}</code></dd></div></dl>
+  ${f[4]?`<div><h3 style="margin-bottom:6px">Where each source gets it</h3><table class="vt">${f[4].map((m,i)=>`<tr><td>${SRCN[i]}</td><td><code>${esc(m)}</code></td></tr>`).join('')}${PARSERS.filter(q=>q.custom).map(q=>{const m=q.map.find(r=>r[1]===f[0]);return m?`<tr><td>${esc(q.name)}</td><td><code>${esc(m[0])}</code></td></tr>`:''}).join('')}</table></div>`:`<div class="empty" style="flex:none"><b>Set by ULPF</b><p>${f[0].startsWith('processing')||f[0].startsWith('raw')||f[0]==='event_id'?'This value is recorded by the framework, not read from the log.':'This value comes from detection or parser rules, not from a single log field.'}</p></div>`}</div>`}
+
+/* ---------- analytics ---------- */
+$('#s-analytics').innerHTML='';
+function anRender(){
+ const srcs=Object.entries(S.src).filter(([k])=>k!=='Requires review').sort((a,b)=>b[1]-a[1]).concat([['Requires review',S.src['Requires review']]]),mx=srcs[0][1];
+ const FC={Syslog:'#4F46E5',CEF:'#0E8A87',JSON:'#A5ADEB',Unknown:'#C4C9D4','Key-value':'#7C86D9'},fm=Object.entries(S.fmt).filter(x=>x[1]>0);
+ const C=2*Math.PI*40;let off=0;
+ const ring=fm.map(([n,v])=>{const l=v/S.total*C,s=`<circle cx="60" cy="60" r="40" fill="none" stroke="${FC[n]||'#94A3B8'}" stroke-width="14" stroke-dasharray="${Math.max(l-2,0.5)} ${C-l+2}" stroke-dashoffset="${-off}"/>`;off+=l;return s}).join('');
+ const SV=[['critical','#C8354B'],['high','#E07B39'],['medium','#E0A82E'],['low','#2A9D8F'],['info','#94A3B8']],smx=Math.max(...SV.map(([k])=>S.sev[k]));
+ const perf=PARSERS.map(p=>{const [o,f]=S.par[p.id]||[0,0];return{n:p.name,fmt:p.fmt,tot:o+f,f,ms:p.ms}}).concat([{n:'No matching parser',fmt:'Unknown',tot:(S.par.none||[0,0])[1],f:(S.par.none||[0,0])[1],ms:null}]);
+ const failed=E.filter(e=>!e.ok).slice(0,5);
+ $('#s-analytics').innerHTML=`<div class="hd"><h1>Analytics</h1><p class="sub">How well ULPF is processing logs across every source and format.</p></div>
+ <div class="kpis" style="margin-top:0">${kpiH()}</div>
+ <div class="charts">
+  <div class="card"><div class="ch"><h2>Events by Source</h2></div><div class="cb">${srcs.map(([n,v])=>`<div class="hb"><span title="${esc(n)}">${esc(n)}</span><div class="tk"><i style="width:${Math.max(v/mx*100,1.5)}%;${n==='Requires review'?'background:#E0A3AB':''}"></i></div><em>${nf(v)}</em></div>`).join('')}</div></div>
+  <div class="card"><div class="ch"><h2>Events by Format</h2></div><div class="cb"><div class="dn"><svg width="140" height="140" viewBox="0 0 120 120" role="img" aria-label="Events by format"><g transform="rotate(-90 60 60)">${ring}</g><text x="60" y="58" text-anchor="middle" font-size="15" font-weight="600" fill="#1E2330" font-family="IBM Plex Sans,sans-serif">${nf(S.total)}</text><text x="60" y="72" text-anchor="middle" font-size="8" fill="#8B93A3" font-family="IBM Plex Sans,sans-serif">events</text></svg>
+   <div class="leg">${fm.map(([n,v])=>`<div><i style="background:${FC[n]||'#94A3B8'}"></i>${n}<em>${(v/S.total*100).toFixed(1)}%</em></div>`).join('')}</div></div></div></div>
+  <div class="card"><div class="ch"><h2>Events by Severity</h2></div><div class="cb"><div class="cols">${SV.map(([k,c])=>`<div class="col"><b>${nf(S.sev[k])}</b><i style="height:${S.sev[k]/smx*118}px;background:${c}"></i><span>${SEVN[k]}</span></div>`).join('')}</div></div></div>
+ </div>
+ <div class="two">
+  <div class="card"><div class="ch"><h2>Parser performance</h2></div><div class="tw"><table><thead><tr><th>Parser</th><th>Events</th><th>Success rate</th><th>Avg time</th><th>Failures</th></tr></thead><tbody>${perf.map(p=>{const r=p.tot?(p.tot-p.f)/p.tot*100:null;return`<tr><td>${esc(p.n)}</td><td style="font-variant-numeric:tabular-nums">${nf(p.tot)}</td><td>${r===null?'<span class="mut">No events yet</span>':`<div class="rate"><div class="bar"><i style="width:${r}%"></i></div><em>${r.toFixed(2)}%</em></div>`}</td><td class="mut">${p.ms?p.ms+' ms':'Not applicable'}</td><td>${p.f}</td></tr>`}).join('')}</tbody></table></div></div>
+  <div class="card"><div class="ch"><h2>Failed events requiring review</h2><span class="chip">${S.fail} total</span></div><div class="fl">${failed.map(e=>`<div class="fli" data-ev="${e.id}" tabindex="0"><span class="chip">${e.id}</span><div><b>${esc(e.r.reason)}</b><small>${esc(evFmt(e))} log received at ${e.rx}</small></div></div>`).join('')||'<p class="note" style="padding:14px">No failed events.</p>'}
+   <div style="padding:10px 8px 6px"><button class="btn sm" data-act="failed">View all failed events</button></div></div></div>
+ </div>`}
+
+/* ---------- navigation and events ---------- */
+function go(k){
+ const scr=k;$$('.screen').forEach(s=>s.classList.toggle('on',s.id==='s-'+scr));
+ $$('#nav button').forEach(b=>b.classList.toggle('on',b.dataset.go===(k==='detail'?'events':k)));
+ if(k==='overview')ovLive();if(k==='events'){buildFilters();evTable()}if(k==='registry')regRender();if(k==='schema')schemaRender();if(k==='analytics')anRender();
+ scrollTo(0,0)}
+function act(a,el){
+ if(a==='failed')return showFailed();
+ if(a==='process')return processNow();
+ if(a==='clear'){$('#pr-ta').value='';$('#pr-ta').focus();return}
+ if(a==='sample'){const s=SAMPLES.find(x=>x.k===el.dataset.k);$('#pr-ta').value=s.gen[0](clockStr());return}
+ if(a==='clearf'){Object.keys(F).forEach(k=>F[k]='');buildFilters();return evTable()}
+ if(a==='wiz')return openWiz();
+ if(!W)return;
+ if(a==='wcancel')return closeWiz();
+ if(a==='wnext')return wizNext();
+ if(a==='wback'){W.step--;W.err='';return drawWiz()}
+ if(a==='addrow'){W.rows.push(['','network.source_ip']);return drawWiz()}
+ if(a==='rm'){W.rows.splice(+el.dataset.i,1);return drawWiz()}
+ if(a==='test')return wizTest();
+ if(a==='wreg')return wizRegister()}
+document.addEventListener('click',e=>{const t=e.target;let x;
+ if(t.id==='modal')return closeWiz();
+ if(x=t.closest('[data-go]'))return go(x.dataset.go);
+ if(x=t.closest('[data-act]'))return act(x.dataset.act,x);
+ if(x=t.closest('[data-ev]'))return openEv(x.dataset.ev);
+ if(x=t.closest('[data-fld]')){selF=x.dataset.fld;schemaRender()}});
+document.addEventListener('keydown',e=>{
+ if(e.key==='Escape'&&W)closeWiz();
+ if(e.key==='Enter'&&e.target.matches&&e.target.matches('tr[data-ev],.fli[data-ev]'))openEv(e.target.dataset.ev)});
+const onIn=e=>{const t=e.target;
+ if(t.id==='ev-q'){if(e.type==='input'){F.q=t.value;evTable()}return}
+ if(t.dataset&&t.dataset.fk){F[t.dataset.fk]=t.value;evTable();return}
+ wizInput(t)};
+document.addEventListener('input',onIn);document.addEventListener('change',onIn);
+const trace=f=>{$$('.on[data-f]').forEach(x=>x.classList.remove('on'));if(f)$$(`[data-f="${f}"]`).forEach(x=>x.classList.add('on'))};
+document.addEventListener('mouseover',e=>{const m=e.target.closest&&e.target.closest('[data-f]');trace(m&&m.dataset.f)});
+document.addEventListener('mouseout',e=>{if(e.target.closest&&e.target.closest('[data-f]'))trace()});
+
+/* simulated live ingest (overview and analytics only re-render when visible) */
+setInterval(()=>{
+ if(document.hidden||busy||W||!($('#s-overview.on')||$('#s-analytics.on')))return;
+ if(Math.random()<.1)ingest(`txn=${88000+seq} mod=billing rc=ERR_TIMEOUT retry=3 host=10.60.8.14`);
+ else{const s=SAMPLES[Math.random()*SAMPLES.length|0];ingest(s.gen[Math.random()*s.gen.length|0](clockStr()))}
+ if($('#s-overview.on'))ovLive();if($('#s-analytics.on'))anRender()},6500);
+
+/* init */
+buildSamples();
+const E42=E.find(e=>e.id==='ULPF-00042');
+$('#pr-ta').value=E42.raw;showResult(E42);
+const h0=(location.hash||'').slice(1);
+go(['overview','process','events','registry','schema','analytics'].includes(h0)?h0:'overview');
+
+</script>
+</body>
+</html>
