@@ -1,0 +1,32 @@
+[
+    {
+        "event_id": "ULPF-001",
+        "timestamp": "2026-09-18T12:10:22Z",
+        "source_ip": "192.168.1.10",
+        "destination_ip": "10.0.0.5",
+        "destination_port": 22,
+        "action": "DENY",
+        "protocol": "TCP",
+        "raw_event": "Firewall denied SSH connection"
+    },
+    {
+        "event_id": "ULPF-002",
+        "timestamp": "2026-09-18T12:11:22Z",
+        "source_ip": "192.168.1.10",
+        "destination_ip": "10.0.0.5",
+        "destination_port": 22,
+        "action": "DENY",
+        "protocol": "TCP",
+        "raw_event": "Firewall denied SSH connection"
+    },
+    {
+        "event_id": "ULPF-003",
+        "timestamp": "2026-09-18T12:12:22Z",
+        "source_ip": "192.168.1.10",
+        "destination_ip": "10.0.0.5",
+        "destination_port": 22,
+        "action": "DENY",
+        "protocol": "TCP",
+        "raw_event": "Firewall denied SSH connection"
+    }
+]
