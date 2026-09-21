@@ -90,7 +90,7 @@ mark.on{background:rgba(var(--h,100,116,139),.32)}
 .prf{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:12px;flex-wrap:wrap}.prf .note{margin:0}.prf div{display:flex;gap:8px}
 .inl{display:flex;align-items:center;gap:8px;font-size:12.5px;color:var(--mut);font-weight:500}
 .stg{margin-top:18px}
-.stp{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));padding:20px 18px 18px}
+.stp{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));padding:20px 18px 18px}
 .sg1{position:relative;padding-right:14px;min-width:0}
 .sg1 .dt{width:28px;height:28px;border-radius:50%;display:grid;place-items:center;background:#F3F4F8;color:var(--faint);border:1px solid var(--line);margin-bottom:10px;position:relative;z-index:1}
 .sg1.done .dt{background:var(--teals);color:var(--teal);border-color:#BFE3E1}
@@ -241,7 +241,7 @@ tr[data-ev]{cursor:pointer}tr[data-ev]:hover{background:#F6F7FF}
 .flow{grid-template-columns:1fr}.lk{padding:12px 0}.lk svg{transform:rotate(90deg)}
 .charts,.two{grid-template-columns:minmax(0,1fr)}
 .sx{grid-template-columns:1fr}.sp{position:static}
-.stp{grid-template-columns:1fr;gap:14px}.sg1:not(:last-child)::after{display:none}}
+.stp{grid-template-columns:repeat(4,minmax(0,1fr));gap:18px 8px}.sg1:not(:last-child)::after{display:none}}
 @media(max-width:900px){
 .app{grid-template-columns:1fr}.side{position:static;height:auto;padding:12px;gap:12px;border-right:0;border-bottom:1px solid var(--line)}
 .nav{flex-direction:row;overflow-x:auto}.nav button{width:auto;white-space:nowrap}.foot{display:none}
@@ -254,6 +254,120 @@ main{padding:22px 16px 40px}.caps,.kpis{grid-template-columns:1fr}.sgs{grid-temp
 #regb td:nth-child(3){min-width:140px}
 #ov-act td:nth-child(3),#ov-act td:nth-child(5),.two .tw td:first-child{white-space:normal}
 @media(max-width:900px){.app{grid-template-columns:minmax(0,1fr)}.side{min-width:0}}
+/* ===== v2: product polish ===== */
+.nav button{position:relative;transition:background .12s,color .12s}
+.nav button.on{font-weight:600}
+.nav button.on::before{content:"";position:absolute;left:-14px;top:8px;bottom:8px;width:3px;border-radius:0 3px 3px 0;background:var(--pri)}
+.foot .ver{display:flex;gap:6px;margin-top:8px;flex-wrap:wrap}.foot .ver span{font:500 11px var(--mono);background:#fff;border:1px solid var(--line);border-radius:6px;padding:1px 7px;color:var(--mut)}
+.btn{transition:background .12s,border-color .12s,transform .05s}.btn:active:not(:disabled){transform:translateY(1px)}
+.lnk{border:0;background:none;color:var(--pri);font:500 12.5px var(--sans);cursor:pointer;padding:0;margin-left:8px}.lnk:hover{text-decoration:underline}
+tr[data-ev]:focus-visible,.fli:focus-visible{outline:2px solid var(--pri2);outline-offset:-2px}
+.st.note{color:#98650A;background:#FCF5DC}.st.skip{color:#6B7280;background:#F3F4F6}.st.flag{color:#B85310;background:#FEF0E4}
+.st.run{color:var(--pri);background:var(--pris);gap:8px}.st.run .spin{width:11px;height:11px;border-width:2px}
+.sec2{margin:28px 0 14px}.sec2 h2{font-size:17px}.sec2 p{margin:3px 0 0;color:var(--mut);font-size:13.5px}
+/* overview */
+.hd .sub{max-width:80ch;line-height:1.55}.cta{display:flex;gap:10px;margin-top:20px;flex-wrap:wrap}
+.srcchips{display:flex;gap:6px;flex-wrap:wrap}.srcchips span{font-size:12px;font-weight:500;background:#F5F6FA;border:1px solid var(--line2);border-radius:7px;padding:3px 9px;color:var(--mut)}.srcchips .pl{background:#fff;border-style:dashed;color:var(--pri)}
+.pipe5{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:26px;padding:24px 22px 4px}
+.ph{position:relative;border:1px solid var(--line);border-radius:14px;background:#fff;display:flex;flex-direction:column}
+.ph:not(:last-child)::after{content:"";position:absolute;right:-19px;top:50%;width:11px;height:11px;border-top:2px solid #B4BAD9;border-right:2px solid #B4BAD9;transform:translateY(-50%) rotate(45deg)}
+.ph-h{display:flex;align-items:center;gap:10px;padding:12px 14px;border-bottom:1px solid var(--line2)}
+.ph-h .ti{width:30px;height:30px;margin:0;border-radius:9px}.ph-h h3{font-size:14px}
+.ph.core{border-color:#B9B5F5;background:var(--pris)}.ph.core .ph-h,.ph.core .stp2+.stp2{border-color:rgba(67,56,202,.16)}.ph.core .ti{background:var(--pri);color:#fff}
+.stp2{display:flex;gap:10px;padding:13px 14px;flex:1;min-height:106px}.stp2+.stp2{border-top:1px solid var(--line2)}
+.sn{flex:none;width:22px;height:22px;border-radius:50%;background:#F1F2F6;color:var(--mut);font:600 11.5px var(--sans);display:grid;place-items:center;margin-top:1px}.ph.core .sn{background:#fff;color:var(--pri)}
+.stp2 b{display:flex;align-items:center;gap:6px;flex-wrap:wrap;font-size:13.5px}.stp2 small{display:block;color:var(--mut);font-size:12.5px;line-height:1.4;margin-top:2px}
+.tg{font:500 10.5px var(--sans);padding:1px 7px;border-radius:99px}.tg.f{color:#0B6E6B;background:var(--teals)}.tg.s{color:var(--pri);background:#E3E2FB}
+.pleg{display:flex;gap:22px;flex-wrap:wrap;padding:16px 22px 0;font-size:12.5px;color:var(--mut)}.pleg>span{display:flex;align-items:center;gap:8px}
+.lane{margin-top:22px}
+.sysb{display:flex;align-items:center;gap:18px;flex-wrap:wrap;padding:12px 18px;margin-top:18px}
+.sysb .sd{display:flex;align-items:center;gap:10px}.sysb .sd i{width:8px;height:8px;border-radius:50%;background:var(--teal);box-shadow:0 0 0 3px var(--teals)}.sysb .sd span{color:#0B6E6B;font-weight:500;font-size:12.5px}
+.sysb .cs{display:flex;gap:6px;flex-wrap:wrap;flex:1;min-width:260px}.sysb .cs span{display:inline-flex;align-items:center;gap:6px;font-size:12px;color:var(--mut);border:1px solid var(--line2);background:#FBFBFD;border-radius:99px;padding:2px 10px}.sysb .cs i{width:6px;height:6px;border-radius:50%;background:var(--teal)}
+.sysb dl{display:flex;gap:20px;margin:0;font-size:12px;color:var(--faint)}.sysb dd{margin:0;color:var(--ink);font-weight:500;font-size:13px}.sysb dt{font-size:11px}
+.caps2{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));margin-top:18px}
+.cap2{display:flex;gap:12px;align-items:center;padding:16px 18px;border-right:1px solid var(--line2)}.cap2:last-child{border-right:0}
+.cap2 .ti{margin:0;width:36px;height:36px;flex:none}.cap2 b{display:block;font-size:13.5px}.cap2 small{color:var(--mut);font-size:12.5px}
+/* log processing hero */
+.sg1 b{font-size:13px}.sg1 small{font-size:12px}
+.sg1.warn .dt{background:#FCF5DC;color:#98650A;border-color:#EFD98F}
+.sg1.done:not(:last-child)::after{background:#BFE3E1}
+.rbar{display:grid;grid-template-columns:1.5fr 1.15fr 1.25fr 1fr 1fr;margin-top:18px;overflow:hidden;border-left:4px solid var(--teal)}
+.rbar.bad{border-left-color:#C8354B}
+.rc{padding:14px 18px;border-right:1px solid var(--line2);min-width:0}.rc:last-child{border-right:0}
+.rc>small{display:block;color:var(--faint);font-size:11.5px;margin-bottom:2px}
+.rc>b{display:block;font-size:13.5px;font-weight:600;overflow-wrap:anywhere}.rc>b.mono{font:600 13px var(--mono)}
+.rc>em{display:block;font-style:normal;color:var(--mut);font-size:12px;margin-top:2px}
+.rc.main{display:flex;gap:12px;align-items:center}.rc.main b{font-size:15px;display:block}.rc.main em{display:block;font-style:normal;color:var(--mut);font-size:12px;margin-top:1px}
+.rico{flex:none;width:34px;height:34px;border-radius:50%;background:var(--teals);color:var(--teal);display:grid;place-items:center}.rbar.bad .rico{background:#FCEBEE;color:#B4233A}
+.two2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;margin-top:18px}
+.vl{list-style:none;margin:0;padding:0}.vl li{display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid var(--line2);font-size:13px}.vl li:last-child{border-bottom:0}
+.vl .tick{width:20px;height:20px}.vl li small{margin-left:auto;color:var(--faint);font-size:12px;text-align:right}
+.tick.note{background:#FCF5DC;color:#98650A}
+.dsec h3{font-size:12.5px;color:var(--mut);font-weight:500;margin-bottom:8px}.dsec+.dsec{margin-top:16px;padding-top:14px;border-top:1px solid var(--line2)}
+.chs{display:flex;gap:8px;flex-wrap:wrap}.kc{display:flex;flex-direction:column;gap:1px;padding:8px 12px;border:1px solid var(--line2);border-radius:10px;background:#FBFBFD;min-width:112px}.kc small{font-size:11px;color:var(--faint)}.kc b{font-size:13px;text-transform:capitalize}
+.flagbox,.clearbox{display:flex;gap:12px;align-items:flex-start;padding:12px 14px;border-radius:12px}
+.flagbox{background:#FFF6EC;border:1px solid #F5D9B7;color:#B85310}.flagbox b,.clearbox b{display:block;font-size:13.5px}.flagbox b{color:#7A410A}.flagbox small{color:#9A6A3A;font-size:12.5px}
+.clearbox{background:var(--teals);border:1px solid #BFE3E1;color:var(--teal)}.clearbox b{color:#0B6E6B}.clearbox small{color:#3F6F6D;font-size:12.5px}
+.tagl{display:flex;gap:6px;flex-wrap:wrap;margin-top:6px}.tagl span{font:500 11px var(--mono);background:#fff;border:1px solid #F0D3AC;border-radius:6px;padding:1px 7px;color:#8A4B0B}
+/* events + investigation detail */
+.sw{position:relative;display:block}.sw svg{position:absolute;left:11px;top:50%;transform:translateY(-50%);color:var(--faint)}.sw input{padding-left:34px}
+.tid{font:400 11px var(--mono);color:var(--faint);margin-top:1px}
+.ety div{font-weight:500}.ety small,.stc small,.dsc,#evb td .mut small{display:block;font:400 11.5px var(--mono);color:var(--faint);margin-top:1px}
+#evb td.mut small,.stc small{font-family:var(--sans)}
+.dsc{font-family:var(--sans)}
+.flg{display:inline-flex;color:#B85310;vertical-align:-2px;margin-left:6px}
+.cnt-bad{color:#B4233A;font-weight:500;margin-left:6px}
+.facts{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));margin-bottom:16px}
+.facts>div{padding:14px 16px;border-right:1px solid var(--line2);min-width:0}.facts>div:last-child{border-right:0}
+.facts small{display:block;color:var(--faint);font-size:11.5px}.facts b{display:block;font:600 13.5px var(--sans);overflow-wrap:anywhere;margin:1px 0}.facts b.m{font:600 13px var(--mono)}
+.facts em{display:block;font-style:normal;color:var(--mut);font-size:12px}
+.flagbar{display:flex;align-items:center;gap:12px;flex-wrap:wrap;padding:12px 16px;border-radius:12px;background:#FFF6EC;border:1px solid #F5D9B7;color:#B85310;margin-bottom:16px}
+.flagbar b{display:block;color:#7A410A;font-size:13.5px}.flagbar span{color:#8A4B0B;font-size:13px}.flagbar .tagl{margin:0 0 0 auto}
+.crumb .acts{display:flex;gap:8px;margin-left:auto;flex-wrap:wrap}
+.pst{display:flex;flex-wrap:wrap;gap:6px;align-items:center;padding:14px 18px 0;color:var(--faint)}
+.ps{display:inline-flex;gap:5px;align-items:center;font-size:12px;font-weight:500;padding:3px 10px;border-radius:99px;background:var(--teals);color:#0B6E6B}
+.ps.fail{background:#FCEBEE;color:#B4233A}.ps.skip{background:#F3F4F8;color:var(--faint)}.ps.warn{background:#FCF5DC;color:#98650A}
+.fli .sev{margin-left:auto;flex:none}
+/* registry */
+.arch{padding:20px;margin-top:22px}
+.corebar{display:flex;align-items:center;gap:14px;flex-wrap:wrap;padding:12px 16px;border-radius:12px;background:var(--pris);border:1px solid #D5D3F8}
+.corebar .lb{display:flex;align-items:center;gap:8px;font-weight:600;color:var(--pri)}.corebar .lb em{font-style:normal;font-weight:500;font-size:11.5px;background:#fff;border-radius:99px;padding:1px 9px;color:var(--mut)}
+.corebar .cs{display:flex;gap:6px;flex-wrap:wrap}.corebar .cs span{font-size:12px;font-weight:500;background:#fff;border:1px solid #DAD8F8;border-radius:7px;padding:3px 9px}
+.plugs{margin-top:28px}.plh{display:flex;align-items:center;gap:10px;font-weight:600;font-size:13.5px}.plh em{font-style:normal;font-weight:500;font-size:12px;color:var(--faint)}
+.plrow{display:flex;gap:12px;flex-wrap:wrap;margin-top:18px}
+.plug{position:relative;flex:1 1 150px;max-width:210px;padding:10px 14px;border:1px solid var(--line);border-radius:10px;background:#fff;text-align:left;font-family:inherit}
+.plug::before{content:"";position:absolute;left:50%;top:-19px;height:19px;border-left:2px solid #C6CBE8}
+.plug b{display:block;font-size:13px;font-weight:600}.plug small{color:var(--faint);font-size:12px}
+.plug.new{border-color:#BFE3E1;background:#FAFEFD}
+.plug.add{border:1.5px dashed #B9B5F5;background:#FBFBFF;color:var(--pri);display:flex;align-items:center;gap:8px;cursor:pointer;font:500 13px var(--sans);justify-content:center}.plug.add:hover{background:var(--pris)}
+#regb td:nth-child(1),#regb td:nth-child(2){white-space:normal}#regb td:nth-child(3){min-width:0}
+/* schema matrix */
+.mx{min-width:900px}.mx th{vertical-align:bottom;padding:12px}.mx th div{color:var(--ink);font-weight:600;font-size:13px}.mx th small{display:block;color:var(--faint);font-weight:400;font-size:11.5px}
+.mx td{white-space:normal;padding:10px 12px;vertical-align:top}.mx td small{display:block;color:var(--faint);font:400 11.5px var(--mono);margin-top:3px;overflow-wrap:anywhere}
+.mx .vf{font:600 12px var(--mono);color:var(--ink);background:#F1F2F6;padding:1px 6px;border-radius:5px}
+.mx .up{font:500 12px var(--mono);color:var(--pri)}
+.mx .dot{display:inline-block;width:9px;height:9px;border-radius:50%;background:rgb(var(--h,139,147,163));margin-right:8px}
+.mx tbody tr{cursor:pointer}.mx tbody tr:hover td{background:#F6F7FF}.mx tbody tr.on td{background:var(--pris)}
+.mx td.na{color:#C3C8D4}
+.mx td:first-child,.mx th:first-child{position:sticky;left:0;background:#fff;z-index:1;white-space:nowrap}.mx th:first-child{background:#FBFBFD}
+.mxn{display:flex;gap:16px;flex-wrap:wrap;justify-content:space-between;padding:12px 18px;border-top:1px solid var(--line2);color:var(--mut);font-size:12.5px}.mxn span{display:flex;align-items:center;gap:6px}
+/* analytics */
+.outb{display:flex;height:12px;border-radius:9px;overflow:hidden;background:#EDEFF4;gap:2px}.outb i{display:block;height:100%}
+.outl{display:flex;gap:28px;flex-wrap:wrap;margin-top:12px;font-size:13px}.outl div{display:flex;align-items:center;gap:8px}.outl i{width:10px;height:10px;border-radius:3px}.outl b{font-variant-numeric:tabular-nums}.outl em{font-style:normal;color:var(--faint)}
+.hb{grid-template-columns:132px minmax(0,1fr) 44px}
+@media(max-width:1240px){
+.pipe5{grid-template-columns:minmax(0,1fr);gap:30px}
+.ph:not(:last-child)::after{right:auto;left:50%;top:auto;bottom:-21px;transform:translateX(-50%) rotate(135deg)}
+.rbar{grid-template-columns:repeat(2,minmax(0,1fr))}.rc{border-bottom:1px solid var(--line2)}
+.two2{grid-template-columns:minmax(0,1fr)}.facts{grid-template-columns:repeat(3,minmax(0,1fr))}.facts>div{border-bottom:1px solid var(--line2)}
+.caps2{grid-template-columns:repeat(2,minmax(0,1fr))}.cap2{border-bottom:1px solid var(--line2)}}
+@media(max-width:900px){
+.stp{grid-template-columns:repeat(2,minmax(0,1fr))}.rbar{grid-template-columns:minmax(0,1fr)}.facts{grid-template-columns:repeat(2,minmax(0,1fr))}
+.caps2{grid-template-columns:minmax(0,1fr)}.cap2{border-right:0}.nav button.on::before{display:none}.crumb{flex-wrap:wrap}.crumb .acts{margin-left:0}.flagbar .tagl{margin-left:0}}
+
+.filters select{min-width:124px}.filters .grow{min-width:200px}
+.hb{grid-template-columns:152px minmax(0,1fr) 44px}
+@media(max-width:1240px){.stp2{min-height:0}}
 </style>
 </head>
 <body>
@@ -261,7 +375,7 @@ main{padding:22px 16px 40px}.caps,.kpis{grid-template-columns:1fr}.sgs{grid-temp
 <aside class="side">
   <div class="brand"><div class="mark" id="mk"></div><div><b>ULPF</b><small>Log Pre-processing<br>Framework</small></div></div>
   <nav class="nav" id="nav" aria-label="Main"></nav>
-  <div class="foot"><b>NTRO Problem Statement 26156</b>Universal Event Schema v1.0</div>
+  <div class="foot"><b>SIH 2026</b>NTRO Problem Statement 26156<div class="ver"><span>ULPF MVP</span><span>Schema v1.0</span></div></div>
 </aside>
 <main>
   <section class="screen" id="s-overview"></section>
@@ -458,17 +572,49 @@ function run(raw,forced){
  return{...res,det,parserName:P.name+' Parser',ver:P.ver,ms:+(1+((line.length*7)%19)/10).toFixed(1),fields:res.map.length};
 }
 const getP=(o,p)=>p.split('.').reduce((a,k)=>a==null?a:a[k],o);
-function U(e){const r=e.r;if(!r.ok)return null;const n=r.net||{};
+/* ---------- pipeline stages 5 to 7: validation, enrichment, threat detection ---------- */
+const IPV4=/^(25[0-5]|2[0-4]\d|1?\d?\d)(\.(25[0-5]|2[0-4]\d|1?\d?\d)){3}$/;
+const isPriv=ip=>/^(10\.|127\.|192\.168\.|169\.254\.|172\.(1[6-9]|2\d|3[01])\.)/.test(ip);
+const scopeOf=ip=>ip?(isPriv(ip)?'internal':'external'):null;
+function enrichR(r){const n=r.net||{},s=scopeOf(n.sip),d=scopeOf(n.dip);
+ const dir=s&&d?(s==='external'&&d==='internal'?'inbound':s==='internal'&&d==='external'?'outbound':s==='internal'?'internal':'external'):null;
+ return{source_scope:s,destination_scope:d,direction:dir}}
+const RISKY=[22,23,445,3389,5900];
+function threatR(r,en){const n=r.net||{},t=r.type||'';
+ if(/^(intrusion|threat|web\.attack)/.test(t))return{flagged:true,rule:'Vendor-reported threat',tags:[t.split('.')[0],'vendor-signature']};
+ if(en.direction==='inbound'&&RISKY.includes(n.dport)&&(r.action==='deny'||r.action==='block'))return{flagged:true,rule:'Blocked inbound access to a remote-admin port',tags:['inbound','remote-admin']};
+ if(t==='auth.login.failed'&&en.source_scope==='external')return{flagged:true,rule:'Failed login from an external address',tags:['external-source','authentication']};
+ return{flagged:false,rule:null,tags:[]}}
+const VSEV=['critical','high','medium','low','info'];
+function validate(u,raw,r){
+ const nn=u.network,ips=[nn.source_ip,nn.destination_ip].filter(Boolean),ports=[nn.source_port,nn.destination_port].filter(x=>x!==null&&x!==undefined);
+ const tsE=r.map.find(m=>m[1]==='timestamp'),noYear=!!tsE&&/^[A-Z][a-z]{2}\s+\d{1,2}\s+\d\d:/.test(raw.slice(tsE[2],tsE[3]));
+ const C=[
+  {t:'Required schema blocks present',s:['source','event','network','enrichment','detection','processing','raw'].every(k=>u[k]&&typeof u[k]==='object')?'pass':'fail'},
+  {t:'Timestamp is valid ISO 8601 UTC',s:/^\d{4}-\d\d-\d\dT\d\d:\d\d:\d\dZ$/.test(u.timestamp||'')&&!isNaN(Date.parse(u.timestamp))?(noYear?'note':'pass'):'fail',d:noYear?`No year in the log, ${YEAR} assumed`:''},
+  {t:'Severity is a valid level',s:VSEV.includes(u.event.severity)?'pass':'fail'},
+  {t:'Event type and category assigned',s:u.event.type&&u.event.category?'pass':'fail'},
+  {t:'Action normalized',s:u.event.action?'pass':'note',d:u.event.action?'':'No action in this log'},
+  {t:'IP addresses well-formed',s:ips.every(i=>IPV4.test(i))?'pass':'fail',d:ips.length?`${ips.length} checked`:'None in this event'},
+  {t:'Ports within 0 to 65535',s:ports.every(p=>Number.isInteger(p)&&p>=0&&p<=65535)?'pass':'fail',d:ports.length?`${ports.length} checked`:'None in this event'},
+  {t:'Raw event preserved unchanged',s:u.raw.preserved===true&&u.raw.original_event===raw?'pass':'fail'}];
+ const f=C.filter(c=>c.s==='fail').length,nt=C.filter(c=>c.s==='note').length;
+ return{checks:C,pass:C.length-f-nt,notes:nt,fail:f,status:f?'failed':nt?'passed_with_notes':'passed'}}
+function U(e){const r=e.r;if(!r.ok)return null;const n=r.net||{},en=r.enr||{},th=r.thr||{};
  return{event_id:e.id,timestamp:r.ts,
   source:{vendor:r.vendor,product:r.product,device:r.device,format:r.fmt},
   event:{type:r.type,category:r.category,severity:r.severity,action:r.action},
   network:{source_ip:n.sip??null,source_port:n.sport??null,destination_ip:n.dip??null,destination_port:n.dport??null,protocol:n.proto??null},
-  processing:{parser:r.parserName,parser_version:r.ver,schema_version:SCHEMA},
+  enrichment:{source_scope:en.source_scope??null,destination_scope:en.destination_scope??null,direction:en.direction??null},
+  detection:{flagged:!!th.flagged,rule:th.rule??null,tags:th.tags||[]},
+  processing:{parser:r.parserName,parser_version:r.ver,schema_version:SCHEMA,validation:r.val?r.val.status:'pending'},
   raw:{preserved:true,original_event:e.raw}}}
 
 /* ---------- events ---------- */
 const E=[];let seq=43;
-const mkEv=(id,rx,raw,forced)=>{raw=raw.trim();const r=run(raw,forced);return{id,rx,raw,r,ok:r.ok,proc:`${DATE} ${rx}.${String((rx.length*97+raw.length*13)%900+100)} UTC`}};
+const mkEv=(id,rx,raw,forced)=>{raw=raw.trim();const r=run(raw,forced);
+ if(r.ok){r.enr=enrichR(r);r.thr=threatR(r,r.enr);r.val=validate(U({id,raw,r}),raw,r)}
+ return{id,rx,raw,r,ok:r.ok,proc:`${DATE} ${rx}.${String((rx.length*97+raw.length*13)%900+100)} UTC`}};
 const evTs=e=>e.r.ok?e.r.ts.replace('T',' ').replace('Z',''):`${DATE} ${e.rx}`;
 const evSev=e=>e.r.ok?e.r.severity:'unknown';
 const evSrc=e=>e.r.ok?e.r.label:'Unidentified source';
@@ -537,6 +683,7 @@ const rxe=s=>s.replace(/[.*+?^${}()|[\]\\]/g,'\\$&');
 const RM=typeof matchMedia!=='undefined'&&matchMedia('(prefers-reduced-motion: reduce)').matches;
 const sleep=ms=>new Promise(r=>setTimeout(r,RM?0:ms));
 const IC={layers:'<path d="M12 3 3 8l9 5 9-5-9-5Z"/><path d="m3 13 9 5 9-5"/>',search:'<circle cx="11" cy="11" r="6"/><path d="m20 20-4-4"/>',code:'<path d="m9 8-5 4 5 4M15 8l5 4-5 4"/>',funnel:'<path d="M3 5h18l-7 8v6l-4-2v-4L3 5Z"/>',grid:'<rect x="4" y="4" width="7" height="7" rx="1.5"/><rect x="13" y="4" width="7" height="7" rx="1.5"/><rect x="4" y="13" width="7" height="7" rx="1.5"/><rect x="13" y="13" width="7" height="7" rx="1.5"/>',swap:'<path d="M4 8h13l-3-3M20 16H7l3 3"/>',bars:'<path d="M5 20V10M12 20V4M19 20v-7"/>',shield:'<path d="M12 3 5 6v5c0 4.5 3 8 7 10 4-2 7-5.5 7-10V6l-7-3Z"/><path d="m9 12 2 2 4-4"/>',plug:'<path d="M9 3v5M15 3v5M7 8h10v3a5 5 0 0 1-10 0V8ZM12 16v5"/>',check:'<path d="m5 12 4.5 4.5L19 7"/>',arrow:'<path d="M5 12h14M13 6l6 6-6 6"/>',link:'<path d="M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1"/><path d="M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1-1"/>',lock:'<rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/>',back:'<path d="m15 6-6 6 6 6"/>',plus:'<path d="M12 5v14M5 12h14"/>',home:'<path d="m3 11 9-8 9 8"/><path d="M5 10v10h14V10"/>',list:'<path d="M8 6h12M8 12h12M8 18h12M4 6h.01M4 12h.01M4 18h.01"/>',file:'<path d="M7 3h7l5 5v13H7z"/><path d="M14 3v5h5"/>',cursor:'<path d="m5 4 6 15 2-6 6-2L5 4Z"/>',x:'<path d="M6 6l12 12M18 6 6 18"/>',play:'<path d="m7 4 13 8-13 8z"/>',trash:'<path d="M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13"/>'};
+Object.assign(IC,{flag:'<path d="M5 21V4M5 4h11l-2 4 2 4H5"/>',alert:'<path d="M12 4 3 20h18L12 4Z"/><path d="M12 10v4M12 17h.01"/>',verify:'<circle cx="12" cy="12" r="9"/><path d="m8.5 12 2.5 2.5 4.5-5"/>',copy:'<rect x="8" y="8" width="12" height="12" rx="2"/><path d="M16 8V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h2"/>'});
 const ic=(n,s=18)=>`<svg width="${s}" height="${s}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${IC[n]}</svg>`;
 const SEVN={critical:'Critical',high:'High',medium:'Medium',low:'Low',info:'Info',unknown:'Unknown'};
 const sevP=s=>`<span class="sev ${s}"><i></i>${SEVN[s]}</span>`;
@@ -553,40 +700,63 @@ const hueA=p=>`data-f="${p}" data-h="${HUE[p]??0}"`;
 function hlRaw(raw,map){const sp=map.map(([vf,path,s,e])=>[s,e,path]).sort((a,b)=>a[0]-b[0]||b[1]-a[1]);let o='',p=0;
  for(const[s,e,f]of sp){if(s<p)continue;o+=esc(raw.slice(p,s))+`<mark ${hueA(f)}>${esc(raw.slice(s,e))}</mark>`;p=e}return o+esc(raw.slice(p))}
 function jsonH(u,marks){
- const jv=(v,p)=>{const s=v===null?'<span class="nl">null</span>':typeof v==='string'?`<span class="s">"${esc(JSON.stringify(v).slice(1,-1))}"</span>`:typeof v==='boolean'?`<span class="b">${v}</span>`:`<span class="n">${v}</span>`;return marks.has(p)&&v!==null?`<mark ${hueA(p)}>${s}</mark>`:s};
- const walk=(o,path,d)=>{const ks=Object.keys(o),pad='  '.repeat(d);return '{\n'+ks.map((k,i)=>{const p=path?path+'.'+k:k,v=o[k];return `${pad}<span class="k">"${k}"</span>: ${v&&typeof v==='object'?walk(v,p,d+1):jv(v,p)}${i<ks.length-1?',':''}`}).join('\n')+'\n'+'  '.repeat(d-1)+'}'};
+ const jv=(v,p)=>{const s=Array.isArray(v)?`[${v.map(x=>`<span class="s">"${esc(x)}"</span>`).join(', ')}]`:v===null?'<span class="nl">null</span>':typeof v==='string'?`<span class="s">"${esc(JSON.stringify(v).slice(1,-1))}"</span>`:typeof v==='boolean'?`<span class="b">${v}</span>`:`<span class="n">${v}</span>`;return marks.has(p)&&v!==null?`<mark ${hueA(p)}>${s}</mark>`:s};
+ const walk=(o,path,d)=>{const ks=Object.keys(o),pad='  '.repeat(d);return '{\n'+ks.map((k,i)=>{const p=path?path+'.'+k:k,v=o[k];return `${pad}<span class="k">"${k}"</span>: ${v&&typeof v==='object'&&!Array.isArray(v)?walk(v,p,d+1):jv(v,p)}${i<ks.length-1?',':''}`}).join('\n')+'\n'+'  '.repeat(d-1)+'}'};
  return walk(u,'',1)}
 const uniJson=e=>jsonH(U(e),new Set(e.r.map.map(m=>m[1])));
 const valH=v=>v===null||v===undefined?'<span class="nl">null</span>':typeof v==='number'?`<span class="n">${v}</span>`:`<span class="s">"${esc(v)}"</span>`;
 
-/* ---------- stage model ---------- */
-const STL=['Detecting source','Parser selected','Fields extracted','Fields mapped','Normalization complete'];
-function stageStates(e){const r=e.r;let s;
- if(r.ok)s=[{s:'done',d:`${r.label} (${r.fmt}), ${r.det.conf}% confidence`},{s:'done',d:`${r.parserName} v${r.ver}`},{s:'done',d:`${r.fields} fields extracted`},{s:'done',d:`${r.fields} fields mapped to Schema v${SCHEMA}`},{s:'done',d:`${e.id} created in ${r.ms} ms`}];
- else if(r.stage===0)s=[{s:'fail',d:r.reason},{s:'skip',d:'Not reached'},{s:'skip',d:'Not reached'},{s:'skip',d:'Not reached'},{s:'skip',d:'Raw event kept for review'}];
- else s=[{s:'done',d:`${r.fmt} format detected`},{s:'done',d:`${r.parserName} v${r.ver}`},{s:'fail',d:r.reason},{s:'skip',d:'Not reached'},{s:'skip',d:'Raw event kept for review'}];
+/* ---------- stage model (7 stages) ---------- */
+const STL=['Raw Log','Format Detection','Parser','Normalize','Validate','Enrich / Detect','Universal Event'];
+const vSum=v=>v.fail?`${v.fail} check failed`:v.notes?`${v.pass} passed, ${v.notes} note${v.notes>1?'s':''}`:`All ${v.checks.length} checks passed`;
+const dirTxt=en=>en&&en.direction?{inbound:'Inbound',outbound:'Outbound',internal:'Internal',external:'External'}[en.direction]:en&&en.source_scope?(en.source_scope==='external'?'External source':'Internal source'):'No network context';
+const vBadge=v=>v.fail?'<span class="st bad"><i></i>Failed</span>':v.notes?'<span class="st note"><i></i>Passed with notes</span>':'<span class="st ok"><i></i>Passed</span>';
+const outBadge=e=>e.ok?(e.r.val.fail?'<span class="st note"><i></i>Normalized, review validation</span>':'<span class="st ok"><i></i>Success</span>'):'<span class="st bad"><i></i>Requires review</span>';
+function stageStates(e){const r=e.r,by=`${byteLen(e.raw)} bytes received`,sk=d=>({s:'skip',d});let s;
+ if(r.ok)s=[{s:'done',d:by},{s:'done',d:r.det.forced?`${r.fmt}, chosen manually`:`${r.fmt}, ${r.label} (${r.det.conf}%)`},{s:'done',d:`${r.parserName} v${r.ver}`},{s:'done',d:`${r.fields} fields mapped`},{s:r.val.fail?'warn':'done',d:vSum(r.val)},{s:'done',d:`${dirTxt(r.enr)}. ${r.thr.flagged?'Threat flagged':'No threat rule matched'}`},{s:'done',d:`${e.id} in ${r.ms} ms`}];
+ else if(r.stage===0)s=[{s:'done',d:by},{s:'fail',d:r.reason},sk('Skipped'),sk('Skipped'),sk('Skipped'),sk('Skipped'),sk('Raw event kept for review')];
+ else s=[{s:'done',d:by},{s:'done',d:r.det&&r.det.forced?'Parser chosen manually':`${r.fmt} detected`},{s:'done',d:`${r.parserName} v${r.ver}`},{s:'fail',d:r.reason},sk('Skipped'),sk('Skipped'),sk('Raw event kept for review')];
  return s.map((x,i)=>({...x,t:STL[i]}))}
-const stgIcon=s=>s==='done'?ic('check',14):s==='fail'?ic('x',14):s==='run'?'<span class="spin"></span>':s==='skip'?'–':'';
-function stages(list){$('#pr-stp').innerHTML=list.map(x=>`<div class="sg1 ${x.s}"><div class="dt">${stgIcon(x.s)}</div><b>${x.t}</b><small>${x.s==='run'?'In progress':x.s==='wait'?'Waiting':esc(x.d)}</small></div>`).join('')}
+const stgIcon=(s,i)=>s==='done'?ic('check',14):s==='fail'?ic('x',14):s==='warn'?ic('alert',14):s==='run'?'<span class="spin"></span>':s==='skip'?'–':i+1;
+function stages(list){$('#pr-stp').innerHTML=list.map((x,i)=>`<div class="sg1 ${x.s}"><div class="dt">${stgIcon(x.s,i)}</div><b>${x.t}</b><small>${x.s==='run'?'In progress':x.s==='wait'?'Waiting':esc(x.d)}</small></div>`).join('')}
+
+/* ---------- shared cards: validation, enrichment and threat detection ---------- */
+const tickI=s=>s==='pass'?ic('check',12):s==='note'?ic('alert',12):ic('x',12);
+const tickC=s=>s==='pass'?'':s==='note'?'note':'bad';
+function valCard(e){const r=e.r,ok=r.ok;
+ return `<div class="card"><div class="ch"><span class="ic">${ic('verify')}</span><h2>Validation</h2>${ok?vBadge(r.val):'<span class="st skip"><i></i>Skipped</span>'}</div><div class="cb">
+ ${ok?`<ul class="vl">${r.val.checks.map(c=>`<li><span class="tick ${tickC(c.s)}">${tickI(c.s)}</span><span>${c.t}</span><small>${esc(c.d||'')}</small></li>`).join('')}</ul>`:`<div class="empty"><b>Validation skipped</b><p>There is no universal event to validate.</p></div>`}</div></div>`}
+function detCard(e){const r=e.r,ok=r.ok,en=ok&&r.enr,th=ok&&r.thr;
+ return `<div class="card"><div class="ch"><span class="ic">${ic('shield')}</span><h2>Enrichment and threat detection</h2>${ok?(th.flagged?'<span class="st flag"><i></i>Flagged</span>':'<span class="st ok"><i></i>Not flagged</span>'):'<span class="st skip"><i></i>Skipped</span>'}</div><div class="cb">
+ ${ok?`<div class="dsec"><h3>Enrichment</h3><div class="chs"><div class="kc"><small>Source scope</small><b>${en.source_scope||'Unknown'}</b></div><div class="kc"><small>Destination scope</small><b>${en.destination_scope||'Unknown'}</b></div><div class="kc"><small>Direction</small><b>${dirTxt(en)}</b></div></div></div>
+ <div class="dsec"><h3>Threat detection</h3>${th.flagged?`<div class="flagbox">${ic('flag',18)}<div><b>${esc(th.rule)}</b><small>Rule-based check on the normalized event</small><div class="tagl">${th.tags.map(t=>`<span>${esc(t)}</span>`).join('')}</div></div></div>`:`<div class="clearbox">${ic('check',16)}<div><b>No threat rule matched</b><small>Rule-based check on the normalized event</small></div></div>`}</div>
+ <p class="note">Format detection identifies what a log is. Threat detection evaluates what the event means.</p>`:`<div class="empty"><b>Enrichment and threat detection skipped</b><p>These stages run on the normalized event, and none was created.</p></div>`}</div></div>`}
 
 /* ---------- log processing: result view ---------- */
 function resultHTML(e){
  const r=e.r,ok=r.ok,st=stageStates(e),bytes=byteLen(e.raw);
+ const bar=`<div class="card rbar ${ok?'ok':'bad'}">
+  <div class="rc main"><span class="rico">${ic(ok?'check':'x',18)}</span><div><b>${ok?'Normalized successfully':'Requires review'}</b><em>${ok?`Universal event created in ${r.ms} ms`:esc(r.reason)}</em></div></div>
+  <div class="rc"><small>Format detected</small><b>${esc(evFmt(e))}</b><em>${ok?(r.det.forced?'Parser chosen manually':`${esc(r.label)}, ${r.det.conf}% confidence`):(r.det?'Parser chosen manually':'Not identified')}</em></div>
+  <div class="rc"><small>Parser</small><b>${r.parserName?esc(r.parserName)+' v'+r.ver:'None matched'}</b><em>${ok?'Selected automatically':'No parser selected'}</em></div>
+  <div class="rc"><small>Validation</small><b>${ok?vBadge(r.val):'<span class="st skip"><i></i>Skipped</span>'}</b><em>${ok?vSum(r.val):'Nothing to validate'}</em></div>
+  <div class="rc"><small>Traceable Event ID</small><b class="mono">${e.id}</b><em>Raw event preserved</em></div></div>`;
  const raw=`<div class="card pcard raw"><div class="ch"><span class="ic">${ic('file')}</span><h2>Raw event</h2><span class="chip">${esc(evFmt(e))}</span></div><div class="cb">
   <pre class="code">${ok?hlRaw(e.raw,r.map):esc(e.raw)}</pre>
   <dl class="kv"><div><dt>Detected format</dt><dd>${esc(evFmt(e))}</dd></div><div><dt>Detected source</dt><dd>${ok?esc(r.label):'Unidentified'}</dd></div><div><dt>Device</dt><dd>${ok?esc(r.device):'Unknown'}</dd></div><div><dt>Detection confidence</dt><dd>${r.det?r.det.conf+'%':'None'}</dd></div><div><dt>Size</dt><dd>${bytes} bytes</dd></div><div><dt>Checksum</dt><dd class="m">${sha(e)}</dd></div></dl></div></div>`;
  const pn=r.parserName?`${r.parserName} v${r.ver}`:'No parser matched';
- const tk=(i,t)=>`<li class="${st[i].s==='fail'?'bad':st[i].s==='skip'?'skip':''}"><span class="tick ${st[i].s==='fail'?'bad':st[i].s==='skip'?'skip':''}">${st[i].s==='done'?ic('check',14):st[i].s==='fail'?ic('x',14):'–'}</span><div><b>${t}</b><small>${esc(st[i].d)}</small></div></li>`;
+ const tk=(i,t,d)=>{const x=st[i],g=x.s==='done'||x.s==='warn',c=x.s==='fail'?'bad':x.s==='skip'?'skip':'';return `<li class="${c}"><span class="tick ${c}">${g?ic('check',14):x.s==='fail'?ic('x',14):'–'}</span><div><b>${t}</b><small>${esc(g&&d?d:x.d)}</small></div></li>`};
  const par=`<div class="card pcard"><div class="ch"><span class="ic">${ic('code')}</span><h2>Parser</h2><span class="chip pri">${r.ver?'v'+r.ver:'None'}</span></div><div class="cb">
   <div class="pname"><div class="ti">${ic('plug',22)}</div><div><b>${esc(pn)}</b>${r.parserName?'<span class="st ok"><i></i>Active</span>':'<span class="st bad"><i></i>Requires review</span>'}</div></div>
-  <ul class="steps">${tk(0,'Source detected')}${tk(2,'Fields extracted')}${tk(3,'Fields mapped')}</ul>
+  <ul class="steps">${tk(1,'Format detected',ok?r.det.why:null)}${tk(2,'Parser selected')}${tk(3,'Fields mapped',ok?`${r.fields} fields to Schema v${SCHEMA}`:null)}</ul>
   ${ok?`<div class="mml"><h3>Vendor field to universal field</h3>${r.map.map(([vf,p])=>`<div class="mm" ${hueA(p)}><code>${esc(vf)}</code>${ic('arrow',12)}<code class="up">${p}</code></div>`).join('')}</div>`:`<div class="empty"><b>Queued for review</b><p>${esc(r.reason)}. The raw event is retained unchanged.</p></div>`}
  </div></div>`;
  const uni=`<div class="card pcard nrm"><div class="ch"><span class="ic">${ic('grid')}</span><h2>Universal event</h2><span class="chip pri">Schema v${SCHEMA}</span></div><div class="cb">
   ${ok?`<pre class="code">${uniJson(e)}</pre><p class="note">Every source produces the same fields, whatever the vendor or format.</p>`:`<div class="empty"><b>No universal event created</b><p>Nothing was normalized. The original raw event is stored and linked to ${e.id} so it can be reprocessed once a parser is available.</p><p style="margin-top:12px"><button class="btn sm" data-act="failed">${ic('list',14)}Review failed events</button></p></div>`}</div></div>`;
  const lk=`<div class="lk"><span>${ic('arrow',15)}</span></div>`;
- return `<div class="flow">${raw}${lk}${par}${lk}${uni}</div>
- <div class="keep"><div class="big">${ic('check',22)}</div><div><h3>Original Raw Event Preserved</h3><p>${ok?'Stored unmodified next to the universal event.':'No parser matched, but the raw event is stored unmodified.'}</p></div>
+ return `${bar}<div class="flow">${raw}${lk}${par}${lk}${uni}</div>
+ <div class="two2">${valCard(e)}${detCard(e)}</div>
+ <div class="keep"><div class="big">${ic('check',22)}</div><div><h3>Original Raw Event Preserved</h3><p>${ok?'Stored unmodified next to the universal event and linked by Event ID.':'No parser matched, but the raw event is stored unmodified and linked by Event ID.'}</p></div>
  <div class="r"><small>Traceable Event ID</small><span class="chip">${e.id}</span><button class="btn pri" data-ev="${e.id}">View event details</button></div></div>`}
 
 /* ---------- screens: shells ---------- */
@@ -594,53 +764,104 @@ $('#mk').innerHTML=ic('layers',20);
 const NAV=[['overview','Overview','home'],['process','Log Processing','funnel'],['events','Events','list'],['registry','Parser Registry','plug'],['schema','Schema Explorer','grid'],['analytics','Analytics','bars']];
 $('#nav').innerHTML=NAV.map(([k,t,i])=>`<button data-go="${k}">${ic(i)}${t}</button>`).join('');
 
-const STG=[['layers','Log Sources'],['search','Detection','Identifies the log format and the device that produced it.'],['code','Parser Framework','Source-specific parsers extract every field.'],['funnel','Normalization','Maps vendor fields to common names and values.'],['grid','Universal Schema','One event structure for every source.','core'],['swap','API','Serves normalized events and their raw originals.'],['bars','Analytics','Search, filter and report across all sources.']];
+const PH=[
+['file','Collect',[['Raw Log','Any security log, any format'],['Ingest','Receive it and keep the original']]],
+['search','Identify',[['Format Detection','Identify the log format and source','f','Format'],['Parser','Select the source-specific parser']]],
+['funnel','Standardize',[['Normalization','Map vendor fields to one schema'],['Validation','Check the event against the schema']]],
+['shield','Assess',[['Enrichment','Add network scope and direction'],['Threat Detection','Flag suspicious activity','s','Security']]],
+['grid','Deliver',[['Universal Event','One structure for every source'],['API / Analytics','Search, filter and report']],'core']];
+let stepN=0;
 $('#s-overview').innerHTML=`
-<div class="hd ovh"><div><span class="tag">${ic('file',14)}NTRO Problem Statement 26156</span><h1>Universal Log Pre-processing Framework</h1><p class="sub">Transform heterogeneous security logs into a standardized, lossless and analytics-ready representation.</p></div><div class="card sys" id="ov-sys"></div></div>
-<div class="card"><div class="pipe">${STG.map(([i,t,d,c])=>`<div class="node ${c||''}"><div class="ti">${ic(i,19)}</div><h3>${t}</h3>${d?`<p>${d}</p>`:`<div class="srcs">${['Cisco ASA','Fortinet','Syslog','CEF','JSON'].map(s=>`<span><i></i>${s}</span>`).join('')}</div>`}</div>`).join('')}</div>
-<div class="lane"><span>${ic('shield',16)}Original raw event preserved unchanged at every stage</span></div></div>
+<div class="hd"><span class="tag">${ic('file',14)}SIH 2026 | NTRO Problem Statement 26156</span><h1>Universal Log Pre-processing Framework</h1>
+ <p class="sub">ULPF accepts heterogeneous security logs, identifies the format, selects the right parser, normalizes everything into one universal schema, validates and enriches each event, and preserves the original record for analysis.</p>
+ <div class="cta"><button class="btn pri" data-go="process">${ic('play',14)}Process a log</button><button class="btn" data-go="schema">${ic('grid',15)}Explore the schema</button></div></div>
+<div class="card"><div class="ch"><h2>How ULPF processes a log</h2><div class="srcchips"><span>Cisco ASA</span><span>Fortinet</span><span>Syslog</span><span>CEF</span><span>JSON</span><span class="pl">+ any registered parser</span></div></div>
+ <div class="pipe5">${PH.map(([i,t,steps,c])=>`<div class="ph ${c||''}"><div class="ph-h"><div class="ti">${ic(i,17)}</div><h3>${t}</h3></div>${steps.map(([n,d,k,tg])=>`<div class="stp2"><span class="sn">${++stepN}</span><div><b>${n}${tg?`<span class="tg ${k}">${tg}</span>`:''}</b><small>${d}</small></div></div>`).join('')}</div>`).join('')}</div>
+ <div class="pleg"><span><span class="tg f">Format</span>Format Detection identifies what a log is</span><span><span class="tg s">Security</span>Threat Detection flags suspicious activity</span></div>
+ <div class="lane"><span>${ic('shield',16)}Original raw event preserved unchanged at every stage</span></div></div>
+<div class="card sysb" id="ov-sys"></div>
 <div class="kpis" id="ov-kpis"></div>
 <div class="card" style="margin-top:18px"><div class="ch"><span class="ic">${ic('list')}</span><h2>Recent processing activity</h2><button class="btn sm" data-go="events">View all events</button></div>
  <div class="tw"><table style="min-width:640px"><thead><tr><th>Received</th><th>Event ID</th><th>Source</th><th>Format</th><th>Result</th><th>Time taken</th></tr></thead><tbody id="ov-act"></tbody></table></div></div>
-<div class="caps" id="ov-caps"></div>`;
+<div class="card caps2" id="ov-caps"></div>`;
 
 const kpiH=()=>`<div class="card kpi"><small>Events processed</small><b>${nf(S.total)}</b><span>All sources and formats</span></div>
 <div class="card kpi"><small>Successfully normalized</small><b>${nf(S.ok)}</b><span>Universal events created</span></div>
 <button class="card kpi bad" data-act="failed" title="Show failed events"><small>Failed / requires review</small><b>${nf(S.fail)}</b><span>Raw events retained. Review failed events</span></button>
 <div class="card kpi"><small>Processing success rate</small><b>${(S.ok/S.total*100).toFixed(1)}%</b><div class="bar"><i style="width:${S.ok/S.total*100}%"></i></div></div>`;
 function ovLive(){
- $('#ov-sys').innerHTML=`<div class="sd"><i></i>System status<span>Operational</span></div><dl><div><dt>Parsers active</dt><dd>${PARSERS.length} of ${PARSERS.length}</dd></div><div><dt>Schema</dt><dd>v${SCHEMA}</dd></div><div><dt>Avg processing</dt><dd>1.9 ms</dd></div></dl>`;
+ const COMP=['Format Detection',`Parsers ${PARSERS.length} of ${PARSERS.length}`,'Normalization','Validation','Enrichment','Threat Detection','API'];
+ $('#ov-sys').innerHTML=`<div class="sd"><i></i><b>System status</b><span>All systems operational</span></div><div class="cs">${COMP.map(c=>`<span><i></i>${c}</span>`).join('')}</div><dl><div><dt>Avg processing</dt><dd>1.9 ms</dd></div><div><dt>Schema</dt><dd>v${SCHEMA}</dd></div></dl>`;
  $('#ov-kpis').innerHTML=kpiH();
  $('#ov-act').innerHTML=E.slice(0,7).map(e=>`<tr data-ev="${e.id}" tabindex="0"><td class="ts">${e.rx}</td><td><span class="chip">${e.id}</span></td><td>${srcCell(e)}</td><td><span class="fmt">${esc(evFmt(e))}</span></td><td>${e.ok?`Normalized by ${esc(evPar(e))}`:`<span class="st bad"><i></i>Needs review</span> <span class="mut">${esc(e.r.reason)}</span>`}</td><td class="mut">${e.ok?e.r.ms+' ms':'Not normalized'}</td></tr>`).join('');
- const CAP=[['shield','Lossless Processing','Every original event is stored exactly as received and linked to its universal event.','Raw and normalized events stay linked'],['funnel','Universal Normalization','Events from different vendors and formats share one schema and common field names.','Same fields for every source'],['plug','Plug-and-Play Parsers','Support a new log source by registering a parser. The core framework stays untouched.',`${PARSERS.length} parsers registered`],['bars','Analytics Ready','Consistent events can be searched, filtered and aggregated across all sources together.',`${nf(S.total)} events processed`]];
- $('#ov-caps').innerHTML=CAP.map(([i,t,d,e])=>`<div class="card cap"><div class="ti">${ic(i,20)}</div><h3>${t}</h3><p>${d}</p><div class="ev">${ic('check',15)}${e}</div></div>`).join('')}
+ const CAP=[['shield','Lossless','Original event kept unchanged'],['funnel','Universal','One schema for every source'],['plug','Plug-and-play',`${PARSERS.length} parsers, add more anytime`],['bars','Analytics ready','Validated, consistent events']];
+ $('#ov-caps').innerHTML=CAP.map(([i,t,d])=>`<div class="cap2"><div class="ti">${ic(i,18)}</div><div><b>${t}</b><small>${d}</small></div></div>`).join('')}
 
 /* ---------- log processing ---------- */
 $('#s-process').innerHTML=`
-<div class="hd"><h1>Log Processing</h1><p class="sub">Paste a raw log or load a sample. ULPF detects the source, selects a parser and builds a universal event while keeping the original untouched.</p></div>
+<div class="hd"><h1>Log Processing</h1><p class="sub">Follow one log through the ULPF pipeline, from raw text to a validated, traceable universal event.</p></div>
 <div class="card"><div class="ch"><span class="ic">${ic('file')}</span><h2>Process new event</h2><label class="inl">Source<select id="pr-src" aria-label="Source"></select></label></div>
  <div class="cb"><div class="chips" id="pr-chips"></div>
  <textarea class="ta" id="pr-ta" rows="4" spellcheck="false" placeholder="Paste a raw log event here" aria-label="Raw log"></textarea>
  <div class="prf"><p class="note">Auto Detect identifies the format and source from the log itself. The original text is stored exactly as received.</p><div><button class="btn" data-act="clear">Clear</button><button class="btn pri" id="pr-go" data-act="process">${ic('play',14)}Process Event</button></div></div></div></div>
-<div class="card stg"><div class="ch"><h2>Processing pipeline</h2><span class="chip" id="pr-tm"></span></div><div class="stp" id="pr-stp"></div></div>
+<div class="card stg"><div class="ch"><h2>Processing pipeline</h2><span id="pr-rs"></span><span class="chip" id="pr-tm"></span></div><div class="stp" id="pr-stp"></div></div>
 <div id="pr-out"></div>`;
 function buildSamples(){
  const cur=$('#pr-src').value||'auto';
  $('#pr-src').innerHTML='<option value="auto">Auto Detect</option>'+SAMPLES.map(s=>`<option value="${s.forced}">${esc(s.label)}</option>`).join('');
  $('#pr-src').value=[...$('#pr-src').options].some(o=>o.value===cur)?cur:'auto';
  $('#pr-chips').innerHTML='<span class="lbl">Load sample</span>'+SAMPLES.map(s=>`<button class="sc" data-act="sample" data-k="${s.k}">${esc(s.label)}</button>`).join('')}
-function showResult(e){$('#pr-tm').textContent=e.id;stages(stageStates(e));$('#pr-out').innerHTML=resultHTML(e)}
+function showResult(e){$('#pr-tm').textContent=e.id;$('#pr-rs').innerHTML=outBadge(e);stages(stageStates(e));$('#pr-out').innerHTML=resultHTML(e)}
 let busy=false;
+async function sendToBackend(e){
+  const r = e.r;
+  const n = r.net || {};
+
+  const payload = {
+    event_id: e.id,
+    timestamp: r.ts,
+    source_ip: n.sip || "",
+    destination_ip: n.dip || "",
+    destination_port: n.dport ?? null,
+    action: (r.action || "UNKNOWN").toUpperCase(),
+    protocol: (n.proto || "UNKNOWN").toUpperCase(),
+    raw_event: e.raw
+  };
+
+  const response = await fetch("http://127.0.0.1:8000/process", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify(payload)
+  });
+
+  if (!response.ok) {
+    throw new Error(`Backend returned ${response.status}`);
+  }
+
+  e.backend = await response.json();
+  return e.backend;
+}
+
 async function processNow(){
  if(busy)return;const raw=$('#pr-ta').value;
  if(!raw.trim()){toast('Paste a raw log or load a sample first');$('#pr-ta').focus();return}
- busy=true;$('#pr-go').disabled=true;$('#pr-tm').textContent='Processing';
- const e=prep(raw,$('#pr-src').value),st=stageStates(e),cur=STL.map(t=>({s:'wait',t,d:''}));
- $('#pr-out').innerHTML='';stages(cur);
- for(let i=0;i<5;i++){
-  cur[i]={s:'run',t:STL[i],d:''};stages(cur);await sleep(340);
+ busy=true;$('#pr-go').disabled=true;$('#pr-tm').textContent='';$('#pr-rs').innerHTML='<span class="st run"><span class="spin"></span>Processing</span>';
+ const e=prep(raw,$('#pr-src').value);
+
+try{
+  await sendToBackend(e);
+}catch(err){
+  console.error('ULPF backend connection failed:',err);
+  toast('Backend unavailable — showing local parser result');
+}
+
+const st=stageStates(e),cur=STL.map(t=>({s:'wait',t,d:''}));
+ for(let i=0;i<STL.length;i++){
+  cur[i]={s:'run',t:STL[i],d:''};stages(cur);await sleep(300);
   cur[i]=st[i];
-  if(st[i].s==='fail'){for(let j=i+1;j<5;j++)cur[j]=st[j];stages(cur);break}
+  if(st[i].s==='fail'){for(let j=i+1;j<STL.length;j++)cur[j]=st[j];stages(cur);break}
   stages(cur)}
  commit(e);showResult(e);busy=false;$('#pr-go').disabled=false;
  toast(e.ok?`${e.id} normalized by ${e.r.parserName}`:`${e.id} could not be parsed. Raw event preserved`);
@@ -648,28 +869,51 @@ async function processNow(){
 
 /* ---------- events ---------- */
 const F={q:'',src:'',fmt:'',sev:'',type:'',st:''};
-$('#s-events').innerHTML=`<div class="hd"><h1>Events</h1><p class="sub">Every normalized event stays linked to its original raw record. Select an event to see both.</p></div>
+$('#s-events').innerHTML=`<div class="hd"><h1>Events</h1><p class="sub">Every normalized event stays linked to its original raw record. Select an event to investigate it.</p></div>
 <div class="filters" id="filters"></div><div class="card tw"><table><thead><tr><th>Timestamp</th><th>Source</th><th>Format</th><th>Event Type</th><th>Severity</th><th>Parser</th><th>Status</th></tr></thead><tbody id="evb"></tbody></table></div>`;
 function buildFilters(){
  const base=['Cisco ASA','Fortinet','Palo Alto','Imperva WAF','VPN Gateway','Linux Server','Generic Network Device'];
  const srcs=[...new Set([...base,...E.map(evSrc)])],types=[...new Set(E.map(evType))].sort(),fmts=[...new Set(['Syslog','CEF','JSON',...E.map(evFmt)])];
  const sel=(k,l,list,f)=>`<label>${l}<select data-fk="${k}" aria-label="${l}"><option value="">All</option>${list.map(x=>`<option value="${esc(x)}"${F[k]===x?' selected':''}>${esc(f?f(x):x)}</option>`).join('')}</select></label>`;
- $('#filters').innerHTML=`<label class="grow">Search<input class="tx" id="ev-q" value="${esc(F.q)}" placeholder="Event ID, IP address, source or text in the raw log" aria-label="Search events"></label>`
+ $('#filters').innerHTML=`<label class="grow">Search<span class="sw">${ic('search',15)}<input class="tx" id="ev-q" value="${esc(F.q)}" placeholder="Event ID, IP address, source or text in the raw log" aria-label="Search events"></span></label>`
   +sel('src','Source',srcs)+sel('fmt','Format',fmts)+sel('sev','Severity',['critical','high','medium','low','info','unknown'],x=>SEVN[x])+sel('type','Event Type',types)+sel('st','Status',['parsed','failed'],x=>x[0].toUpperCase()+x.slice(1))+'<span class="count" id="cnt"></span>'}
+const flagI=e=>e.ok&&e.r.thr.flagged?`<span class="flg" title="Flagged: ${esc(e.r.thr.rule)}">${ic('flag',14)}</span>`:'';
+const valNote=e=>e.ok?(e.r.val.fail?'Validation failed':e.r.val.notes?`Valid, ${e.r.val.notes} note`:'Validated'):'Needs review';
+const evDev=e=>e.ok?e.r.device:(e.r.parserName?'Parse failed':'No parser matched');
 function evTable(){
  const q=F.q.trim().toLowerCase();
  const r=E.filter(e=>(!F.src||evSrc(e)===F.src)&&(!F.fmt||evFmt(e)===F.fmt)&&(!F.sev||evSev(e)===F.sev)&&(!F.type||evType(e)===F.type)&&(!F.st||(F.st==='parsed')===e.ok)&&(!q||(e.id+' '+e.raw+' '+evSrc(e)+' '+evType(e)+' '+evFmt(e)+' '+(e.ok?e.r.type+' '+Object.values(e.r.net).join(' '):e.r.reason)).toLowerCase().includes(q)));
- $('#evb').innerHTML=r.map(e=>`<tr tabindex="0" data-ev="${e.id}"><td class="ts">${evTs(e)}</td><td>${srcCell(e)}</td><td><span class="fmt">${esc(evFmt(e))}</span></td><td>${esc(evType(e))}</td><td>${sevP(evSev(e))}</td><td class="mut">${esc(evPar(e))}</td><td>${stP(e)}</td></tr>`).join('')||`<tr><td colspan="7" class="mut" style="text-align:center;padding:32px">No events match these filters. <button class="btn sm" data-act="clearf">Clear filters</button></td></tr>`;
- $('#cnt').textContent=`Showing ${r.length} of ${E.length} recent events`}
+ $('#evb').innerHTML=r.map(e=>`<tr tabindex="0" data-ev="${e.id}"><td><div class="ts">${evTs(e)}</div><div class="tid">${e.id}</div></td>
+  <td><div class="srcc"><span class="av ${e.ok?'':'g'}">${ini(evSrc(e))}</span><div>${esc(evSrc(e))}<small>${esc(evDev(e))}</small></div></div></td>
+  <td><span class="fmt">${esc(evFmt(e))}</span></td>
+  <td class="ety"><div>${esc(evType(e))}${flagI(e)}</div><small>${e.ok?esc(e.r.type):'no event type'}</small></td>
+  <td>${sevP(evSev(e))}</td>
+  <td class="mut"><div>${e.r.parserName?esc(e.r.parserName):'No parser'}</div><small>${e.r.ver?'v'+e.r.ver:'Not applicable'}</small></td>
+  <td class="stc">${stP(e)}<small>${valNote(e)}</small></td></tr>`).join('')||`<tr><td colspan="7" class="mut" style="text-align:center;padding:36px">No events match these filters. <button class="btn sm" data-act="clearf">Clear filters</button></td></tr>`;
+ const act=Object.values(F).some(Boolean),bad=r.filter(e=>!e.ok).length;
+ $('#cnt').innerHTML=`Showing ${r.length} of ${E.length} recent events${bad?` <span class="cnt-bad">${bad} need review</span>`:''}${act?' <button class="lnk" data-act="clearf">Reset filters</button>':''}`}
 function showFailed(){Object.keys(F).forEach(k=>F[k]='');F.st='failed';go('events')}
 
-/* ---------- event details ---------- */
+/* ---------- event details: investigation view ---------- */
 function openEv(id){const e=E.find(x=>x.id===id)||E[0];detail(e);go('detail')}
 function detail(e){
- const r=e.r,ok=r.ok,u=U(e),P=PARSERS.find(p=>p.id===r.parserId);
+ const r=e.r,ok=r.ok,u=U(e),n=ok?r.net:{},st=stageStates(e);
+ const ep=(ip,pt)=>ip?`${ip}${pt?':'+pt:''}`:'Not in this log',cap=s=>s?s[0].toUpperCase()+s.slice(1):'';
+ const facts=ok?[
+  ['Source',ep(n.sip,n.sport),n.sip?`${cap(r.enr.source_scope)} address`:'No network context','m'],
+  ['Destination',ep(n.dip,n.dport),n.dip?`${cap(r.enr.destination_scope)} address`:'No network context','m'],
+  ['Action',cap(r.action)||'None',evType(e)],
+  ['Direction',dirTxt(r.enr),n.proto?`Protocol ${n.proto.toUpperCase()}`:'No protocol'],
+  ['Parser',`${r.parserName} v${r.ver}`,`${evFmt(e)}, ${r.det.conf}% confidence`],
+  ['Validation',vSum(r.val),cap(r.val.status.replace(/_/g,' '))]]
+ :[['Format detected',evFmt(e),r.det?'Format identified':'Not identified'],['Parser',r.parserName?`${r.parserName} v${r.ver}`:'None matched',r.parserName?'Selected, field extraction failed':'No parser selected'],['Failure reason',r.reason,'Normalization stopped'],['Status','Requires review','Queued for parser review'],['Raw event','Preserved','Stored unmodified'],['Universal event','Not created','Nothing to validate']];
+ const rel=ok&&n.sip?E.filter(x=>x.id!==e.id&&x.ok&&x.r.net.sip===n.sip).slice(0,4):[];
+ const acts=`<span class="acts"><button class="btn sm" data-act="copy" data-k="id" data-id="${e.id}">${ic('copy',14)}Copy ID</button><button class="btn sm" data-act="copy" data-k="raw" data-id="${e.id}">${ic('copy',14)}Copy raw</button>${ok?`<button class="btn sm" data-act="copy" data-k="json" data-id="${e.id}">${ic('copy',14)}Copy JSON</button>`:''}</span>`;
  $('#s-detail').innerHTML=`
- <div class="crumb"><button data-go="events">${ic('back',16)}Events</button><span>/</span><span>${e.id}</span></div>
- <div class="hd" style="margin-bottom:22px"><h1>${esc(ok?r.title:'Unrecognized log message')}</h1><div class="meta">${sevP(evSev(e))}<span class="chip">${e.id}</span><span>${evTs(e)} UTC</span><span>${esc(evSrc(e))}</span>${stP(e)}</div></div>
+ <div class="crumb"><button data-go="events">${ic('back',16)}Events</button><span>/</span><span>${e.id}</span>${acts}</div>
+ <div class="hd" style="margin-bottom:18px"><h1>${esc(ok?r.title:(r.parserName?'Log could not be normalized':'Unrecognized log message'))}</h1><div class="meta">${sevP(evSev(e))}${ok&&r.thr.flagged?`<span class="st flag"><i></i>Flagged</span>`:''}${stP(e)}<span class="chip">${e.id}</span><span>${evTs(e)} UTC</span><span>${esc(evSrc(e))}</span></div></div>
+ <div class="card facts">${facts.map(([l,v,s,m])=>`<div><small>${l}</small><b class="${m||''}">${esc(v)}</b><em>${esc(s)}</em></div>`).join('')}</div>
+ ${ok&&r.thr.flagged?`<div class="flagbar">${ic('flag',18)}<div><b>Flagged by threat detection</b><span>${esc(r.thr.rule)}</span></div><div class="tagl">${r.thr.tags.map(t=>`<span>${esc(t)}</span>`).join('')}</div></div>`:''}
  <p class="hint">${ic('cursor',15)}Hover a highlighted field or a mapping row to trace it between the raw and normalized event.</p>
  <div class="pair">
   <div class="card pcard raw"><div class="ch"><h2>Original raw event</h2><span class="chip teal">${ic('lock',11)}Unmodified</span><span class="chip">${e.id}</span></div><div class="cb"><pre class="code">${ok?hlRaw(e.raw,r.map):esc(e.raw)}</pre><div class="pfoot"><span>${byteLen(e.raw)} bytes</span><span>Format: ${esc(evFmt(e))}</span><span>Checksum ${sha(e)}</span></div></div></div>
@@ -679,8 +923,10 @@ function detail(e){
  </div>
  <div class="card" style="margin-top:20px"><div class="ch"><span class="ic">${ic('arrow')}</span><h2>Field mapping</h2><span class="chip">${ok?r.fields+' fields':'0 fields'}</span></div>
   ${ok?`<div class="tw"><table class="mt"><thead><tr><th>Vendor field</th><th>Raw value</th><th></th><th>Universal field</th><th>Normalized value</th></tr></thead><tbody>${r.map.map(([vf,p,s,en])=>`<tr class="mr" ${hueA(p)}><td><code>${esc(vf)}</code></td><td class="rv">${esc(e.raw.slice(s,en))}</td><td class="ar">${ic('arrow',14)}</td><td><span class="dot"></span><code class="up">${p}</code></td><td><code>${valH(getP(u,p))}</code></td></tr>`).join('')}</tbody></table></div>`:`<div class="cb"><div class="empty"><b>No fields were mapped</b><p>Field mapping appears here once a parser extracts fields from the event.</p></div></div>`}</div>
- <div class="card" style="margin-top:20px"><div class="ch"><span class="ic">${ic('link')}</span><h2>Traceability</h2></div>
-  <div class="lin"><span class="chip">Raw event</span>${ic('arrow',14)}<span class="chip pri">${esc(ok?evPar(e):'No parser')}</span>${ic('arrow',14)}<span class="chip">${ok?'Normalized event':'Queued for review'}</span></div>
+ <div class="two2">${valCard(e)}${detCard(e)}</div>
+ ${ok&&n.sip?`<div class="card" style="margin-top:18px"><div class="ch"><span class="ic">${ic('link')}</span><h2>Related events</h2><span class="chip">Same source address ${n.sip}</span></div><div class="fl">${rel.map(x=>`<div class="fli" data-ev="${x.id}" tabindex="0"><span class="chip">${x.id}</span><div><b>${esc(evType(x))} on ${esc(evSrc(x))}</b><small>${evTs(x)} UTC, ${esc(x.r.parserName)}</small></div>${sevP(evSev(x))}</div>`).join('')||'<p class="note" style="padding:14px 10px">No other recent events from this address.</p>'}</div></div>`:''}
+ <div class="card" style="margin-top:18px"><div class="ch"><span class="ic">${ic('link')}</span><h2>Traceability</h2><span class="chip teal">${ic('check',11)}${ok?'Linked by Event ID':'Raw event retained'}</span></div>
+  <div class="pst">${st.map((x,i)=>`<span class="ps ${x.s}">${x.s==='done'?ic('check',12):x.s==='fail'?ic('x',12):x.s==='warn'?ic('alert',12):'–'}${x.t}</span>${i<st.length-1?ic('arrow',12):''}`).join('')}</div>
   <dl class="tr">
    <div><dt>Event ID</dt><dd class="m">${e.id}</dd></div><div><dt>Source</dt><dd>${esc(evSrc(e))}${ok?` (${esc(r.device)})`:''}</dd></div><div><dt>Vendor</dt><dd>${ok?esc(r.vendor):'Unknown'}</dd></div><div><dt>Parser</dt><dd>${ok?esc(r.parserName):(r.parserName?esc(r.parserName):'None')}</dd></div>
    <div><dt>Parser Version</dt><dd>${r.ver||'None'}</dd></div><div><dt>Schema Version</dt><dd>${ok?SCHEMA:'Not applicable'}</dd></div><div><dt>Processed Time</dt><dd class="m">${e.proc}</dd></div>
@@ -688,10 +934,14 @@ function detail(e){
   </dl></div>`}
 
 /* ---------- parser registry ---------- */
-const DESC={asa:'Cisco ASA firewall',forti:'Fortinet FortiGate firewall',cef:'ArcSight CEF from Palo Alto, Imperva and others',json:'Application and gateway JSON logs',syslog:'Linux servers and network devices'};
-$('#s-registry').innerHTML=`<div class="hd regh"><div><h1>Parser Registry</h1><p class="sub">Each parser is a self-contained module. Register one to support a new log source without changing the framework.</p></div><button class="btn pri" data-act="wiz">${ic('plus',15)}Register New Parser</button></div>
-<div class="card"><div class="tw"><table style="min-width:780px"><thead><tr><th>Parser</th><th>Format</th><th>Detected by</th><th>Version</th><th>Fields mapped</th><th>Events processed</th><th>Status</th></tr></thead><tbody id="regb"></tbody></table></div></div>`;
-function regRender(){$('#regb').innerHTML=PARSERS.map(p=>`<tr><td><div class="srcc"><span class="av ${p.custom?'g':''}">${ini(p.name)}</span><div>${esc(p.name)}<small>${esc(p.custom?p.vendor+' '+p.product:DESC[p.id])}</small></div></div></td><td><span class="fmt">${p.fmt}</span></td><td class="sig">${esc(p.sig)}</td><td class="mut">v${p.ver}</td><td>${p.fields}</td><td style="font-variant-numeric:tabular-nums">${nf((S.par[p.id]||[0])[0])}</td><td><span class="st ok"><i></i>Active</span></td></tr>`).join('')}
+const DESC={asa:'Cisco ASA firewall',forti:'Fortinet FortiGate firewall',cef:'Palo Alto, Imperva and other CEF devices',json:'Application and gateway JSON logs',syslog:'Linux servers and network devices'};
+$('#s-registry').innerHTML=`<div class="hd regh"><div><h1>Parser Registry</h1><p class="sub">Add a parser without changing the core framework. Each parser is a self-contained plug-in that teaches ULPF one log source.</p></div><button class="btn pri" data-act="wiz">${ic('plus',15)}Register New Parser</button></div>
+<div class="card arch" id="reg-arch"></div>
+<div class="card" style="margin-top:18px"><div class="tw"><table><thead><tr><th>Parser</th><th>Vendor / Source</th><th>Format</th><th>Version</th><th>Fields</th><th>Events parsed</th><th>Status</th></tr></thead><tbody id="regb"></tbody></table></div></div>`;
+function regRender(){
+ $('#reg-arch').innerHTML=`<div class="corebar"><span class="lb">${ic('lock',15)}ULPF core framework<em>unchanged</em></span><div class="cs">${['Ingest','Format Detection','Normalization','Validation','Enrichment','Threat Detection','API'].map(s=>`<span>${s}</span>`).join('')}</div></div>
+ <div class="plugs"><div class="plh">Parser plug-ins<em>${PARSERS.length} registered</em></div><div class="plrow">${PARSERS.map(p=>`<div class="plug ${p.custom?'new':''}"><b>${esc(p.name)}</b><small>${p.fmt}, v${p.ver}</small></div>`).join('')}<button class="plug add" data-act="wiz">${ic('plus',15)}Register New Parser</button></div></div>`;
+ $('#regb').innerHTML=PARSERS.map(p=>`<tr><td><div class="srcc"><span class="av ${p.custom?'g':''}">${ini(p.name)}</span><div>${esc(p.name)}<small class="sig">${esc(p.sig)}</small></div></div></td><td><div>${esc(p.vendor)}</div><small class="dsc">${esc(p.custom?p.product:DESC[p.id])}</small></td><td><span class="fmt">${p.fmt}</span></td><td class="mut">v${p.ver}</td><td>${p.fields}</td><td style="font-variant-numeric:tabular-nums">${nf((S.par[p.id]||[0])[0])}</td><td><span class="st ok"><i></i>Active</span></td></tr>`).join('')}
 
 /* wizard */
 const MAPPABLE=['source.device','event.severity','event.action','network.source_ip','network.source_port','network.destination_ip','network.destination_port','network.protocol'];
@@ -718,7 +968,7 @@ function drawWiz(){
     <div class="ln"><span class="tick">${ic('check',12)}</span><span>Output conforms to Universal Event Schema v${SCHEMA}</span></div>
     <table class="vt">${r.found.map(([vf,p,v])=>`<tr><td><code>${esc(vf)}</code> to <code>${p}</code></td><td><code>${esc(v)}</code></td></tr>`).join('')}</table></div>`
    :`<div class="vres badb"><h3>Validation failed</h3><div class="ln"><span class="tick bad">${ic('x',12)}</span><span>${r.miss.length?`Not found in the sample: ${r.miss.map(esc).join(', ')}`:'Add at least one mapping'}</span></div><p class="note">Adjust the mapping or the sample log and run the test again.</p></div>`):''}`}
- $('#modal').innerHTML=`<div class="dlg" role="dialog" aria-modal="true" aria-label="Register new parser"><div class="dh"><h2>Register new parser</h2>
+ $('#modal').innerHTML=`<div class="dlg" role="dialog" aria-modal="true" aria-label="Register new parser"><div class="dh"><h2>Register new parser</h2><p class="note" style="margin-top:4px">Add a parser without changing the core framework.</p>
   <div class="wz">${S3.map((t,i)=>`<div class="${i+1===w.step?'on':i+1<w.step?'dn2':''}"><i>${i+1<w.step?ic('check',12):i+1}</i>${t}</div>`).join('')}</div></div>
   <div class="db">${w.err?`<p class="note" style="color:#B4233A">${esc(w.err)}</p>`:''}${body}</div>
   <div class="df">${w.step>1?'<button class="btn" data-act="wback">Back</button>':''}<span class="sp2"></span><button class="btn" data-act="wcancel">Cancel</button>${w.step<3?'<button class="btn pri" data-act="wnext">Next</button>':`<button class="btn pri" data-act="wreg"${w.res&&w.res.ok&&!w.busy?'':' disabled'}>Register Parser</button>`}</div></div>`;
@@ -751,16 +1001,34 @@ const SG=[
 ['Network',[['network.source_ip','string','Address the traffic came from.','198.51.100.23',['src','srcip','src','client_ip','from address']],['network.source_port','integer','Port on the source side.','49152',['src (address/port)','srcport','spt','client_port','port']],['network.destination_ip','string','Address the traffic was sent to.','10.10.5.20',['dst','dstip','dst','server_ip','Not in message']],['network.destination_port','integer','Port on the destination side.','3389',['dst (address/port)','dstport','dpt','server_port','Not in message']],['network.protocol','string','Lowercase protocol name.','tcp',['protocol in message','proto (6 to tcp)','proto','proto','service (ssh2 to ssh)']]]],
 ['Processing',[['processing.parser','string','Parser that normalized the event.','Cisco ASA Parser',null],['processing.parser_version','string','Version of that parser.','1.0',null],['processing.schema_version','string','Version of the Universal Event Schema.','1.0',null]]],
 ['Raw',[['raw.preserved','boolean','Always true. The original event is kept for every processed event.','true',null],['raw.original_event','string','The exact text received. It is never changed.','<164>Sep 20 2026 09:18:04 fw-edge-01 : %ASA-4-106023 …',null]]]];
-let selF='network.source_ip';
-$('#s-schema').innerHTML=`<div class="hd"><h1>Schema Explorer</h1><p class="sub">The Universal Event Schema v${SCHEMA}. Every parser writes to these fields, so events from any source can be queried the same way.</p></div>
-<div class="legend"><span>Colored dots match the highlights in the raw and normalized views.</span><span>${ic('cursor',14)} Select a field to see where each source gets it.</span></div>
+/* schema additions: enrichment, detection, validation */
+SG.splice(SG.findIndex(g=>g[0]==='Processing'),0,
+ ['Enrichment',[['enrichment.source_scope','string','Whether the source address is internal or external.','external',null],['enrichment.destination_scope','string','Whether the destination address is internal or external.','internal',null],['enrichment.direction','string','Traffic direction: inbound, outbound, internal or external.','inbound',null]]],
+ ['Detection',[['detection.flagged','boolean','True when a threat detection rule matched the normalized event.','true',null],['detection.rule','string','Name of the rule that matched, or null.','Blocked inbound access to a remote-admin port',null],['detection.tags','array','Labels attached by the matching rule.','inbound, remote-admin',null]]]);
+SG.find(g=>g[0]==='Processing')[1].push(['processing.validation','string','Validation result: passed, passed_with_notes or failed.','passed',null]);
+const ADDED=['Enrichment','Detection','Processing','Raw'];
+let selF='network.destination_port';
+const MXR=['timestamp','source.device','event.type','event.severity','event.action','network.source_ip','network.source_port','network.destination_ip','network.destination_port','network.protocol'];
+const SMAP={};
+function smap(p){if(p.id in SMAP)return SMAP[p.id];
+ const sm=SAMPLES.find(s=>s.k===p.id);let m=null;
+ if(sm){const raw=sm.gen[0](clockStr()),r=run(raw,p.id);if(r.ok){m={};r.map.forEach(([vf,path,s,e])=>{m[path]={vf,v:raw.slice(s,e)}})}}
+ return SMAP[p.id]=m}
+$('#s-schema').innerHTML=`<div class="hd"><h1>Schema Explorer</h1><p class="sub">Every vendor format maps into one Universal Event Schema v${SCHEMA}. See how each parser fills the same fields.</p></div>
+<div class="card"><div class="ch"><span class="ic">${ic('swap')}</span><h2>Vendor field to universal field</h2><span class="chip">From each parser's sample log</span></div>
+ <div class="tw"><table class="mx" id="mx"></table></div>
+ <div class="mxn"><span>Rows are universal fields. Columns are parsers. Each cell shows the vendor field and the value it carried.</span><span>${ic('cursor',14)}Select a row to inspect that field.</span></div></div>
+<div class="sec2"><h2>Universal Event Schema fields</h2><p>Fields with a colored dot are read from the log. Fields marked Added by ULPF are produced by the framework.</p></div>
 <div class="sx"><div class="sgs" id="sgs"></div><div class="card sp" id="sp"></div></div>`;
 function schemaRender(){
- $('#sgs').innerHTML=SG.map(([g,fs])=>`<div class="card sgc"><div class="ch"><h2>${g}</h2><span class="chip">${fs.length} fields</span></div><div class="cb">${fs.map(([n,t])=>`<button class="fr ${n===selF?'on':''}" data-fld="${n}"><i ${HUE[n]!==undefined?`data-h="${HUE[n]}"`:'class="no"'}></i><code>${n.includes('.')?n.split('.')[1]:n}</code><span class="chip">${t.split(' ')[0]}</span></button>`).join('')}</div></div>`).join('');
- const f=SG.flatMap(g=>g[1]).find(x=>x[0]===selF),ev=E.find(e=>e.id==='ULPF-00042'),v=getP(U(ev),f[0]);
+ $('#mx').innerHTML=`<thead><tr><th>Universal field</th>${PARSERS.map(p=>`<th><div>${esc(p.name)}</div><small>${p.fmt}, v${p.ver}</small></th>`).join('')}</tr></thead>
+ <tbody>${MXR.map(path=>`<tr class="${path===selF?'on':''}" data-fld="${path}"><td><span class="dot" data-h="${HUE[path]??0}"></span><code class="up">${path}</code></td>${PARSERS.map(p=>{const m=(smap(p)||{})[path];return m?`<td><code class="vf">${esc(m.vf)}</code><small>${esc(m.v.length>28?m.v.slice(0,27)+'…':m.v)}</small></td>`:'<td class="na">–</td>'}).join('')}</tr>`).join('')}</tbody>`;
+ $('#sgs').innerHTML=SG.map(([g,fs])=>`<div class="card sgc"><div class="ch"><h2>${g}</h2>${ADDED.includes(g)?'<span class="chip teal">Added by ULPF</span>':''}<span class="chip">${fs.length} fields</span></div><div class="cb">${fs.map(([n,t])=>`<button class="fr ${n===selF?'on':''}" data-fld="${n}"><i ${HUE[n]!==undefined?`data-h="${HUE[n]}"`:'class="no"'}></i><code>${n.includes('.')?n.split('.')[1]:n}</code><span class="chip">${t.split(' ')[0]}</span></button>`).join('')}</div></div>`).join('');
+ const f=SG.flatMap(g=>g[1]).find(x=>x[0]===selF)||SG[0][1][0],ev=E.find(e=>e.id==='ULPF-00042'),v=getP(U(ev),f[0]);
+ const rows=f[4]?PARSERS.map(p=>{const m=(smap(p)||{})[f[0]];return `<tr><td>${esc(p.name)}</td><td>${m?`<code>${esc(m.vf)}</code>`:`<span class="mut">${/^source\.(vendor|product)$/.test(f[0])?'Set by the parser':'Not in this sample'}</span>`}</td></tr>`}).join(''):'';
  $('#sp').innerHTML=`<div class="ch"><h2>Field details</h2></div><div class="cb"><code class="path">${f[0]}</code>
   <dl style="margin:0;display:flex;flex-direction:column;gap:14px"><div><dt>Type</dt><dd>${f[1]}</dd></div><div><dt>Description</dt><dd>${f[2]}</dd></div><div><dt>Value in ${ev.id}</dt><dd><code class="chip" style="white-space:normal;overflow-wrap:anywhere">${v===null||v===undefined?'null':esc(String(v)).slice(0,90)}</code></dd></div></dl>
-  ${f[4]?`<div><h3 style="margin-bottom:6px">Where each source gets it</h3><table class="vt">${f[4].map((m,i)=>`<tr><td>${SRCN[i]}</td><td><code>${esc(m)}</code></td></tr>`).join('')}${PARSERS.filter(q=>q.custom).map(q=>{const m=q.map.find(r=>r[1]===f[0]);return m?`<tr><td>${esc(q.name)}</td><td><code>${esc(m[0])}</code></td></tr>`:''}).join('')}</table></div>`:`<div class="empty" style="flex:none"><b>Set by ULPF</b><p>${f[0].startsWith('processing')||f[0].startsWith('raw')||f[0]==='event_id'?'This value is recorded by the framework, not read from the log.':'This value comes from detection or parser rules, not from a single log field.'}</p></div>`}</div>`}
+  ${f[4]?`<div><h3 style="margin-bottom:6px">Where each source gets it</h3><table class="vt">${rows}</table></div>`:`<div class="empty" style="flex:none"><b>Added by ULPF</b><p>${/^(enrichment|detection)/.test(f[0])?'This value is added after normalization by the enrichment and threat detection stages. It is not read from the log.':f[0].startsWith('processing')||f[0].startsWith('raw')||f[0]==='event_id'?'This value is recorded by the framework, not read from the log.':'This value comes from detection or parser rules, not from a single log field.'}</p></div>`}</div>`}
 
 /* ---------- analytics ---------- */
 $('#s-analytics').innerHTML='';
@@ -771,17 +1039,20 @@ function anRender(){
  const ring=fm.map(([n,v])=>{const l=v/S.total*C,s=`<circle cx="60" cy="60" r="40" fill="none" stroke="${FC[n]||'#94A3B8'}" stroke-width="14" stroke-dasharray="${Math.max(l-2,0.5)} ${C-l+2}" stroke-dashoffset="${-off}"/>`;off+=l;return s}).join('');
  const SV=[['critical','#C8354B'],['high','#E07B39'],['medium','#E0A82E'],['low','#2A9D8F'],['info','#94A3B8']],smx=Math.max(...SV.map(([k])=>S.sev[k]));
  const perf=PARSERS.map(p=>{const [o,f]=S.par[p.id]||[0,0];return{n:p.name,fmt:p.fmt,tot:o+f,f,ms:p.ms}}).concat([{n:'No matching parser',fmt:'Unknown',tot:(S.par.none||[0,0])[1],f:(S.par.none||[0,0])[1],ms:null}]);
- const failed=E.filter(e=>!e.ok).slice(0,5);
+ const failed=E.filter(e=>!e.ok).slice(0,5),okp=S.ok/S.total*100,fp=100-okp;
  $('#s-analytics').innerHTML=`<div class="hd"><h1>Analytics</h1><p class="sub">How well ULPF is processing logs across every source and format.</p></div>
  <div class="kpis" style="margin-top:0">${kpiH()}</div>
  <div class="charts">
   <div class="card"><div class="ch"><h2>Events by Source</h2></div><div class="cb">${srcs.map(([n,v])=>`<div class="hb"><span title="${esc(n)}">${esc(n)}</span><div class="tk"><i style="width:${Math.max(v/mx*100,1.5)}%;${n==='Requires review'?'background:#E0A3AB':''}"></i></div><em>${nf(v)}</em></div>`).join('')}</div></div>
   <div class="card"><div class="ch"><h2>Events by Format</h2></div><div class="cb"><div class="dn"><svg width="140" height="140" viewBox="0 0 120 120" role="img" aria-label="Events by format"><g transform="rotate(-90 60 60)">${ring}</g><text x="60" y="58" text-anchor="middle" font-size="15" font-weight="600" fill="#1E2330" font-family="IBM Plex Sans,sans-serif">${nf(S.total)}</text><text x="60" y="72" text-anchor="middle" font-size="8" fill="#8B93A3" font-family="IBM Plex Sans,sans-serif">events</text></svg>
    <div class="leg">${fm.map(([n,v])=>`<div><i style="background:${FC[n]||'#94A3B8'}"></i>${n}<em>${(v/S.total*100).toFixed(1)}%</em></div>`).join('')}</div></div></div></div>
-  <div class="card"><div class="ch"><h2>Events by Severity</h2></div><div class="cb"><div class="cols">${SV.map(([k,c])=>`<div class="col"><b>${nf(S.sev[k])}</b><i style="height:${S.sev[k]/smx*118}px;background:${c}"></i><span>${SEVN[k]}</span></div>`).join('')}</div></div></div>
+  <div class="card"><div class="ch"><h2>Severity Distribution</h2></div><div class="cb"><div class="cols">${SV.map(([k,c])=>`<div class="col"><b>${nf(S.sev[k])}</b><i style="height:${S.sev[k]/smx*118}px;background:${c}"></i><span>${SEVN[k]}</span></div>`).join('')}</div></div></div>
  </div>
  <div class="two">
-  <div class="card"><div class="ch"><h2>Parser performance</h2></div><div class="tw"><table><thead><tr><th>Parser</th><th>Events</th><th>Success rate</th><th>Avg time</th><th>Failures</th></tr></thead><tbody>${perf.map(p=>{const r=p.tot?(p.tot-p.f)/p.tot*100:null;return`<tr><td>${esc(p.n)}</td><td style="font-variant-numeric:tabular-nums">${nf(p.tot)}</td><td>${r===null?'<span class="mut">No events yet</span>':`<div class="rate"><div class="bar"><i style="width:${r}%"></i></div><em>${r.toFixed(2)}%</em></div>`}</td><td class="mut">${p.ms?p.ms+' ms':'Not applicable'}</td><td>${p.f}</td></tr>`}).join('')}</tbody></table></div></div>
+  <div class="card"><div class="ch"><h2>Processing success and review</h2><span class="chip">${nf(S.total)} events</span></div>
+   <div class="cb" style="padding-bottom:14px"><div class="outb" role="img" aria-label="Normalized ${okp.toFixed(2)} percent, requires review ${fp.toFixed(2)} percent"><i style="width:${okp}%;background:var(--teal)"></i><i style="flex:1;min-width:3px;background:#C8354B"></i></div>
+    <div class="outl"><div><i style="background:var(--teal)"></i>Normalized<b>${nf(S.ok)}</b><em>${okp.toFixed(2)}%</em></div><div><i style="background:#C8354B"></i>Requires review<b>${nf(S.fail)}</b><em>${fp.toFixed(2)}%</em></div></div></div>
+   <div class="tw"><table><thead><tr><th>Parser</th><th>Events</th><th>Success rate</th><th>Avg time</th><th>Failures</th></tr></thead><tbody>${perf.map(p=>{const r=p.tot?(p.tot-p.f)/p.tot*100:null;return`<tr><td>${esc(p.n)}</td><td style="font-variant-numeric:tabular-nums">${nf(p.tot)}</td><td>${r===null?'<span class="mut">No events yet</span>':`<div class="rate"><div class="bar"><i style="width:${r}%"></i></div><em>${r.toFixed(2)}%</em></div>`}</td><td class="mut">${p.ms?p.ms+' ms':'Not applicable'}</td><td>${p.f}</td></tr>`}).join('')}</tbody></table></div></div>
   <div class="card"><div class="ch"><h2>Failed events requiring review</h2><span class="chip">${S.fail} total</span></div><div class="fl">${failed.map(e=>`<div class="fli" data-ev="${e.id}" tabindex="0"><span class="chip">${e.id}</span><div><b>${esc(e.r.reason)}</b><small>${esc(evFmt(e))} log received at ${e.rx}</small></div></div>`).join('')||'<p class="note" style="padding:14px">No failed events.</p>'}
    <div style="padding:10px 8px 6px"><button class="btn sm" data-act="failed">View all failed events</button></div></div></div>
  </div>`}
@@ -794,6 +1065,8 @@ function go(k){
  scrollTo(0,0)}
 function act(a,el){
  if(a==='failed')return showFailed();
+ if(a==='copy'){const e=E.find(x=>x.id===el.dataset.id),k=el.dataset.k,t=k==='json'?JSON.stringify(U(e),null,2):k==='raw'?e.raw:e.id;
+  (navigator.clipboard?navigator.clipboard.writeText(t):Promise.reject()).then(()=>toast(`${k==='id'?'Event ID':k==='raw'?'Raw event':'Universal event JSON'} copied`),()=>toast('Copy is not available in this browser'));return}
  if(a==='process')return processNow();
  if(a==='clear'){$('#pr-ta').value='';$('#pr-ta').focus();return}
  if(a==='sample'){const s=SAMPLES.find(x=>x.k===el.dataset.k);$('#pr-ta').value=s.gen[0](clockStr());return}
@@ -836,7 +1109,7 @@ setInterval(()=>{
 buildSamples();
 const E42=E.find(e=>e.id==='ULPF-00042');
 $('#pr-ta').value=E42.raw;showResult(E42);
-const h0=(location.hash||'').slice(1);
+const h0=(locatiion.hash||'').slice(1);
 go(['overview','process','events','registry','schema','analytics'].includes(h0)?h0:'overview');
 
 </script>
